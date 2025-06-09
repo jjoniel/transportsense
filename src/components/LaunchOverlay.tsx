@@ -9,18 +9,19 @@ export default function LaunchOverlay({
 }) {
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
-      <div className="bg-[var(--foreground)] p-6 rounded shadow text-center">
-        <h1 className="text-2xl font-semibold mb-2 text-[var(--background)]">
+      <div className="transparent px-4 py-8 sm:p-6 text-center w-full lg:w-[50%]">
+        <h1 className="text-3xl sm:text-4xl font-semibold mb-9 text-[var(--background)] font-domine">
           TransportSense
         </h1>
-        <p className="text-[var(--background)] mb-4">
-          Learn how better transportation planning can improve cities.
+        <p className="text-base sm:text-lg text-[var(--background)] mb-9">
+          Discover why traffic works the way it does — and how better design can
+          change everything.
         </p>
         <button
           onClick={onContinue}
-          className="px-4 py-2 bg-[var(--secondary)] rounded hover:bg-[var(--complementary)] transition"
+          className="px-4 py-2 bg-transparent border border-[var(--accent)] rounded-full hover:bg-[var(--accent)] transition-all duration-300"
         >
-          Continue
+          explore
         </button>
       </div>
     </div>

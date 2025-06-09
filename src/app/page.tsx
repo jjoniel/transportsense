@@ -18,13 +18,13 @@ export default function HomePage() {
   return (
     <main className="min-h-screen relative">
       <div
-        className={
+        className={`transition-all duration-500 ${
           step === "zoom"
             ? "hidden"
             : step === "launch"
-            ? "blur-sm opacity-60 pointer-events-none"
+            ? "blur-lg opacity-100 pointer-events-none"
             : ""
-        }
+        }`}
       >
         <CitySelector onSelect={handleCitySelect} selectedCity={selectedCity} />
       </div>

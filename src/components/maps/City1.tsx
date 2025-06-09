@@ -8,7 +8,7 @@ const City1 = (props: React.SVGProps<SVGSVGElement>) => (
     baseProfile="tiny"
     {...props}
   >
-    <g fill="none" stroke="#000">
+    <g fill="none" stroke="#fff">
       <path
         strokeWidth={2}
         d="m319.84 188.65-2.32-.41-.84-.25-.94-.48-1.37-.86-.97-.86-.7-.96-.55-.88-.3-1.03-.13-1.43.06-1.07.16-.96.4-1.37"
