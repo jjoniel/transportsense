@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import LaunchOverlay from "./components/LaunchOverlay";
-import CitySelector from "./components/CitySelector";
-import CityLayout from "./components/CityLayout";
+import LaunchOverlay from "@/components/LaunchOverlay";
+import CitySelector from "@/components/CitySelector";
+import City1 from "@/components/maps/City1";
 
 export default function HomePage() {
   const [step, setStep] = useState<"launch" | "select" | "zoom">("launch");
@@ -16,10 +16,20 @@ export default function HomePage() {
   };
 
   return (
-    <main className="min-h-screen bg-gray-100">
+    <main className="min-h-screen relative">
+      <div
+        className={
+          step === "zoom"
+            ? "hidden"
+            : step === "launch"
+            ? "blur-sm opacity-60 pointer-events-none"
+            : ""
+        }
+      >
+        <CitySelector onSelect={handleCitySelect} selectedCity={selectedCity} />
+      </div>
       {step === "launch" && <LaunchOverlay onContinue={handleContinue} />}
-      {step === "select" && <CitySelector onSelect={handleCitySelect} />}
-      {step === "zoom" && selectedCity && <CityLayout city={selectedCity} />}
+      {step === "zoom" && selectedCity === "city1" && <City1 />}
     </main>
   );
 }
