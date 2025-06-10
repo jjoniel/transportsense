@@ -1,12 +1,13 @@
 @import "tailwindcss";
 
+/* Root CSS Variables */
 :root {
   --black: #111111;
   --white: #e8e9f3;
   --accent: #eb1043;
 }
 
-/* Tailwind-aware theme tokens */
+/* Tailwind-aware Theme Tokens */
 @theme inline {
   --color-background: var(--black);
   --color-foreground: var(--white);
@@ -17,7 +18,7 @@
   --font-strong: var(--font-bebas);
 }
 
-/* Global application styles */
+/* Global Base Styles */
 body {
   background: var(--color-background);
   color: var(--color-foreground);
@@ -26,8 +27,21 @@ body {
 
 button {
   cursor: pointer;
+  transition: background-color 0.2s, transform 0.2s;
 }
 
+@media (pointer: fine) {
+  button:hover {
+    background-color: var(--accent);
+  }
+}
+
+button:active {
+  transform: scale(0.96);
+  background-color: var(--accent);
+}
+
+/* Keyframe Animations */
 @keyframes fade-in {
   from {
     opacity: 0;
@@ -39,6 +53,7 @@ button {
   }
 }
 
+/* Animation Utility Classes */
 .animate-fade-in {
-  animation: fade-in 3s;
+  animation: fade-in 2s;
 }

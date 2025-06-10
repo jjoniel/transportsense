@@ -9,24 +9,22 @@ import Loading from "@/components/Loading";
 
 export default function HomePage() {
   const [step, setStep] = useState<"launch" | "select" | "view">("launch");
-  const [selectedCity, setSelectedCity] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [selectedCity, setSelectedCity] = useState<{
+    id: string;
+    label: string;
+  } | null>(null);
 
   const handleContinue = () => setStep("select");
-  const handleCitySelect = (city: string) => {
-    setLoading(true);
+  const handleCitySelect = (city: { id: string; label: string }) => {
     setSelectedCity(city);
-    setTimeout(() => {
-      setLoading(false);
-      setStep("view");
-    }, 1000); // Adjust duration as needed
+    setStep("view");
   };
 
   return (
     <main className="min-h-screen relative">
-      {(step === "launch" || step === "select") && !loading && (
+      {(step === "launch" || step === "select") && (
         <div
-          className={`transition-filter,opacity duration-500 ${
+          className={`transition-filter,opacity duration-200 ${
             step === "launch"
               ? "blur-lg pointer-events-none"
               : "blur-none pointer-events-auto"
@@ -38,16 +36,16 @@ export default function HomePage() {
           />
         </div>
       )}
-      {loading && <Loading />}
       {step === "launch" && <LaunchOverlay onContinue={handleContinue} />}
-      {selectedCity === "city1" && (
+      {selectedCity?.id === "city1" && step === "view" && (
         <CityView
           onBack={() => {
             setSelectedCity(null);
             setStep("select");
           }}
+          city={selectedCity}
         >
-          <City1 className="transition-opacity transition-filter animate-fade-in" />
+          <City1 className="transition-opacity transition-filter" />
         </CityView>
       )}
     </main>
