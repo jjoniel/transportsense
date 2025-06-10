@@ -3,19 +3,18 @@
 import { useState } from "react";
 import LaunchOverlay from "@/components/LaunchOverlay";
 import CitySelector from "@/components/CitySelector";
-import City1 from "@/components/maps/City1";
+import { cities } from "@/constants/cities";
 import CityView from "@/components/CityView";
 import Loading from "@/components/Loading";
 
 export default function HomePage() {
   const [step, setStep] = useState<"launch" | "select" | "view">("launch");
-  const [selectedCity, setSelectedCity] = useState<{
-    id: string;
-    label: string;
-  } | null>(null);
+  const [selectedCity, setSelectedCity] = useState<
+    (typeof cities)[number] | null
+  >(null);
 
   const handleContinue = () => setStep("select");
-  const handleCitySelect = (city: { id: string; label: string }) => {
+  const handleCitySelect = (city: (typeof cities)[number]) => {
     setSelectedCity(city);
     setStep("view");
   };
@@ -26,7 +25,7 @@ export default function HomePage() {
         <div
           className={`transition-filter,opacity duration-200 ${
             step === "launch"
-              ? "blur-lg pointer-events-none"
+              ? "blur-3xl pointer-events-none"
               : "blur-none pointer-events-auto"
           }`}
         >
@@ -37,7 +36,7 @@ export default function HomePage() {
         </div>
       )}
       {step === "launch" && <LaunchOverlay onContinue={handleContinue} />}
-      {selectedCity?.id === "city1" && step === "view" && (
+      {selectedCity && step === "view" && (
         <CityView
           onBack={() => {
             setSelectedCity(null);
@@ -45,7 +44,9 @@ export default function HomePage() {
           }}
           city={selectedCity}
         >
-          <City1 className="transition-opacity transition-filter" />
+          {selectedCity.component && (
+            <selectedCity.component className="transition-opacity transition-filter" />
+          )}
         </CityView>
       )}
     </main>

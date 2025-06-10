@@ -5,8 +5,8 @@ import City1 from "@/components/maps/City1";
 import { cities } from "@/constants/cities";
 
 type CitySelectorProps = {
-  onSelect: (city: { id: string; label: string }) => void;
-  selectedCity: { id: string; label: string } | null;
+  onSelect: (city: (typeof cities)[number]) => void;
+  selectedCity: (typeof cities)[number] | null;
 };
 
 export default function CitySelector({
@@ -25,16 +25,14 @@ export default function CitySelector({
             onClick={() => onSelect(city)}
             className="group bg-[var(--black)] rounded-4xl shadow flex items-center justify-center text-center hover:border-[var(--accent)] border w-full aspect-square max-w-[90vw] mx-auto"
           >
-            {city.id === "city1" ? (
-              <div className="relative w-full h-full">
-                <span className="absolute font-strong inset-0 flex items-center justify-center text-9xl text-[var(--white)] font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none [@media(hover:none)]:opacity-100">
-                  Akron
-                </span>
-                <div className="transition duration-300 group-hover:opacity-20 [@media(hover:none)]:opacity-20 transition-opacity duration-300 w-full h-full">
-                  <City1 className="w-full h-full scale-94" />
-                </div>
+            <div className="relative w-full h-full">
+              <span className="absolute font-strong inset-0 flex items-center justify-center text-7xl text-[var(--white)] font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none [@media(hover:none)]:opacity-100">
+                {city.label}
+              </span>
+              <div className="transition duration-300 group-hover:opacity-20 [@media(hover:none)]:opacity-20 transition-opacity duration-300 w-full h-full">
+                <city.component className="w-full h-full scale-94" />
               </div>
-            ) : null}
+            </div>
           </button>
         ))}
       </div>
