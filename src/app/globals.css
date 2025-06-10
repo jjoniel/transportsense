@@ -1,14 +1,9 @@
 @import "tailwindcss";
 
-/* Base design tokens */
 :root {
-  --black: #0e0e0e;
+  --black: #111111;
   --white: #e8e9f3;
   --accent: #eb1043;
-
-  --font-domine: var(--font-domine);
-  --font-bebas: var(--font-bebas);
-  --font-rubik: var(--font-rubik);
 }
 
 /* Tailwind-aware theme tokens */
@@ -17,7 +12,7 @@
   --color-foreground: var(--white);
   --color-accent: var(--accent);
 
-  --font-sans: var(--font-rubik);
+  --font-sans: var(--font-roboto-condensed);
   --font-serif: var(--font-domine);
   --font-strong: var(--font-bebas);
 }
@@ -26,18 +21,24 @@
 body {
   background: var(--color-background);
   color: var(--color-foreground);
-  font-family: var(--font-rubik);
+  font-family: var(--font-roboto-condensed);
+}
+
+button {
+  cursor: pointer;
 }
 
 @keyframes fade-in {
   from {
     opacity: 0;
+    filter: blur(1rem);
   }
   to {
     opacity: 1;
+    filter: blur(0);
   }
 }
 
 .animate-fade-in {
-  animation: fade-in 5s;
+  animation: fade-in 3s;
 }

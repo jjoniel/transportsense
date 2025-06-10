@@ -5,23 +5,31 @@ import LaunchOverlay from "@/components/LaunchOverlay";
 import CitySelector from "@/components/CitySelector";
 import City1 from "@/components/maps/City1";
 import CityView from "@/components/CityView";
+import Loading from "@/components/Loading";
 
 export default function HomePage() {
   const [step, setStep] = useState<"launch" | "select" | "view">("launch");
   const [selectedCity, setSelectedCity] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const handleContinue = () => setStep("select");
   const handleCitySelect = (city: string) => {
+    setLoading(true);
     setSelectedCity(city);
-    setStep("view");
+    setTimeout(() => {
+      setLoading(false);
+      setStep("view");
+    }, 1000); // Adjust duration as needed
   };
 
   return (
     <main className="min-h-screen relative">
-      {(step === "launch" || step === "select") && (
+      {(step === "launch" || step === "select") && !loading && (
         <div
-          className={`${
-            step === "launch" ? "blur-lg opacity-100 pointer-events-none" : ""
+          className={`transition-filter,opacity duration-500 ${
+            step === "launch"
+              ? "blur-lg pointer-events-none"
+              : "blur-none pointer-events-auto"
           }`}
         >
           <CitySelector
@@ -30,13 +38,17 @@ export default function HomePage() {
           />
         </div>
       )}
+      {loading && <Loading />}
       {step === "launch" && <LaunchOverlay onContinue={handleContinue} />}
-      {step === "view" && selectedCity === "city1" && (
-        <div className="animate-fade-in transition-opacity duration-5000 opacity-0 animate-opacity-fade-in">
-          <CityView>
-            <City1 />
-          </CityView>
-        </div>
+      {selectedCity === "city1" && (
+        <CityView
+          onBack={() => {
+            setSelectedCity(null);
+            setStep("select");
+          }}
+        >
+          <City1 className="transition-opacity transition-filter animate-fade-in" />
+        </CityView>
       )}
     </main>
   );

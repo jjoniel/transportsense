@@ -19,7 +19,7 @@ export default function LaunchOverlay({
         </p>
         <button
           onClick={onContinue}
-          className="px-4 py-2 bg-transparent border cursor-pointer border-[var(--accent)] rounded-full hover:bg-[var(--accent)] transition-all duration-300"
+          className="px-4 py-2 bg-transparent border border-[var(--accent)] rounded-full hover:bg-[var(--accent)] transition-all duration-300"
         >
           explore
         </button>

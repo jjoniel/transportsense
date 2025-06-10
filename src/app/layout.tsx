@@ -1,5 +1,11 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Domine, Bebas_Neue, Rubik } from "next/font/google";
+import {
+  Geist,
+  Geist_Mono,
+  Domine,
+  Bebas_Neue,
+  Roboto_Condensed,
+} from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -23,8 +29,8 @@ const bebas = Bebas_Neue({
   weight: "400",
 });
 
-const rubik = Rubik({
-  variable: "--font-rubik",
+const robotoCondensed = Roboto_Condensed({
+  variable: "--font-roboto-condensed",
   subsets: ["latin"],
 });
 
@@ -42,7 +48,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${domine.variable} ${bebas.variable} ${rubik.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${domine.variable} ${bebas.variable} ${robotoCondensed.variable} antialiased`}
       >
         {children}
       </body>
