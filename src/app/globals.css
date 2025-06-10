@@ -55,5 +55,5 @@ button:active {
 
 /* Animation Utility Classes */
 .animate-fade-in {
-  animation: fade-in 2s;
+  animation: fade-in 0.5s;
 }

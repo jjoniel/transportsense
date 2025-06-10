@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import LaunchOverlay from "@/components/LaunchOverlay";
 import CitySelector from "@/components/CitySelector";
 import { cities } from "@/constants/cities";
@@ -8,22 +8,25 @@ import CityView from "@/components/CityView";
 import Loading from "@/components/Loading";
 
 export default function HomePage() {
-  const [step, setStep] = useState<"launch" | "select" | "view">("launch");
-  const [selectedCity, setSelectedCity] = useState<
-    (typeof cities)[number] | null
-  >(null);
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const step =
+    (searchParams.get("step") as "launch" | "select" | "view") ?? "launch";
+  const cityId = searchParams.get("city");
+  const selectedCity = cities.find((c) => c.id === cityId) ?? null;
 
-  const handleContinue = () => setStep("select");
+  const handleContinue = () => {
+    router.push("?step=select", { scroll: false });
+  };
   const handleCitySelect = (city: (typeof cities)[number]) => {
-    setSelectedCity(city);
-    setStep("view");
+    router.push(`?step=view&city=${city.id}`, { scroll: false });
   };
 
   return (
     <main className="min-h-screen relative">
       {(step === "launch" || step === "select") && (
         <div
-          className={`transition-filter,opacity duration-200 ${
+          className={`transition-filter,opacity duration-.5 ${
             step === "launch"
               ? "blur-3xl pointer-events-none"
               : "blur-none pointer-events-auto"
@@ -39,14 +42,11 @@ export default function HomePage() {
       {selectedCity && step === "view" && (
         <CityView
           onBack={() => {
-            setSelectedCity(null);
-            setStep("select");
+            router.push("?step=select", { scroll: false });
           }}
           city={selectedCity}
         >
-          {selectedCity.component && (
-            <selectedCity.component className="transition-opacity transition-filter" />
-          )}
+          {selectedCity.component && <selectedCity.component />}
         </CityView>
       )}
     </main>

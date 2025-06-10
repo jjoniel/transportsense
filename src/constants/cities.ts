@@ -4,7 +4,7 @@ import City3 from "@/components/maps/City3";
 export const CITY_NAMES = {
   CITY_1: "Akron",
   CITY_2: "Houston",
-  CITY_3: "Wichita",
+  CITY_3: "Blacksburg",
 };
 
 export const cities = [

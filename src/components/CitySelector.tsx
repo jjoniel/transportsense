@@ -14,7 +14,7 @@ export default function CitySelector({
   selectedCity,
 }: CitySelectorProps) {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-8 lg:py-16">
+    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-8 lg:py-16 animate-fade-in">
       <h2 className="text-xl font-semibold mb-6 font-serif">
         Choose a city to explore
       </h2>
@@ -30,7 +30,7 @@ export default function CitySelector({
                 {city.label}
               </span>
               <div className="transition duration-300 group-hover:opacity-20 [@media(hover:none)]:opacity-20 transition-opacity duration-300 w-full h-full">
-                <city.component className="w-full h-full scale-94" />
+                <city.component className="w-full h-full scale-95" />
               </div>
             </div>
           </button>
