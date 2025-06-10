@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Domine, Bebas_Neue } from "next/font/google";
+import { Geist, Geist_Mono, Domine, Bebas_Neue, Rubik } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -23,6 +23,11 @@ const bebas = Bebas_Neue({
   weight: "400",
 });
 
+const rubik = Rubik({
+  variable: "--font-rubik",
+  subsets: ["latin"],
+});
+
 export const metadata: Metadata = {
   title: "TransportSense",
   keywords: ["transportation", "urban planning", "cities", "sustainability"],
@@ -37,7 +42,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${domine.variable} ${bebas.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${domine.variable} ${bebas.variable} ${rubik.variable} antialiased`}
       >
         {children}
       </body>

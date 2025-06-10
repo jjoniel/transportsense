@@ -19,7 +19,7 @@ export default function CitySelector({
   selectedCity,
 }: CitySelectorProps) {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-16 bg-[var(--background)]">
+    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-16">
       <h2 className="text-xl font-semibold mb-6">Choose a city to explore</h2>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 w-full max-w-7xl">
         {cities.map((city) => (
@@ -30,8 +30,8 @@ export default function CitySelector({
           >
             {city.id === "city1" && selectedCity === null ? (
               <div className="relative w-full h-full">
-                <span className="absolute font-bebas inset-0 flex items-center justify-center text-4xl text-[var(--white)] font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
-                  Akron, OH
+                <span className="absolute font-strong inset-0 flex items-center justify-center text-9xl text-[var(--white)] font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                  Akron
                 </span>
                 <div className="transition duration-300 group-hover:opacity-20 transition-opacity duration-300 w-full h-full">
                   <g>

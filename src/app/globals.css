@@ -8,6 +8,7 @@
 
   --font-domine: var(--font-domine);
   --font-bebas: var(--font-bebas);
+  --font-rubik: var(--font-rubik);
 }
 
 /* Tailwind-aware theme tokens */
@@ -16,6 +17,7 @@
   --color-foreground: var(--white);
   --color-accent: var(--accent);
 
+  --font-sans: var(--font-rubik);
   --font-serif: var(--font-domine);
   --font-strong: var(--font-bebas);
 }
@@ -24,5 +26,18 @@
 body {
   background: var(--color-background);
   color: var(--color-foreground);
-  font-family: var(--font-sans), sans-serif;
+  font-family: var(--font-rubik);
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 5s;
 }
