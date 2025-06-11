@@ -1,7 +1,6 @@
 "use client";
 
 import React from "react";
-import City1 from "@/components/maps/City1";
 import { cities } from "@/constants/cities";
 
 type CitySelectorProps = {
@@ -29,7 +28,7 @@ export default function CitySelector({
               <span className="absolute font-strong inset-0 flex items-center justify-center text-7xl text-[var(--white)] font-medium opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none [@media(hover:none)]:opacity-100">
                 {city.label}
               </span>
-              <div className="transition duration-300 group-hover:opacity-20 [@media(hover:none)]:opacity-20 transition-opacity duration-300 w-full h-full">
+              <div className="transition duration-300 group-hover:opacity-20 [@media(hover:none)]:opacity-20 transition-opacity duration-300 w-full h-fåull">
                 <city.component className="w-full h-full scale-95" />
               </div>
             </div>

@@ -32,7 +32,7 @@ const CityView: React.FC<CityViewProps> = ({ city, children, onBack }) => {
 
       {/* Map Area */}
       <div className="lg:basis-2/3 w-full flex justify-end items-center lg:border-l-10 lg:border-0 border-t-2 border-b-2 lg:border-[var(--accent)]">
-        <div className="w-full h-full overflow-hidden aspect-square">
+        <div className="w-full h-full max-w-[130vh] max-h-[130vh] overflow-hidden">
           {children}
         </div>
       </div>
