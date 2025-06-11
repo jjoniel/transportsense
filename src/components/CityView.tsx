@@ -32,9 +32,11 @@ const CityView: React.FC<CityViewProps> = ({ city, children, onBack }) => {
 
       {/* Map Area */}
       <div className="lg:basis-2/3 w-full flex justify-end items-center lg:border-l-10 lg:border-0 border-t-2 border-b-2 lg:border-[var(--accent)]">
-        <div className="w-full lg:h-screen aspect-square">{children}</div>
+        <div className="w-full h-full overflow-hidden aspect-square">
+          {children}
+        </div>
       </div>
-      <div className="lg:hidden flex text-white mt-4 lg:mt-auto lg:mb-4">
+      <div className="sm:hidden flex text-white mt-4 lg:mt-auto lg:mb-4">
         some content will go here
       </div>
     </div>
