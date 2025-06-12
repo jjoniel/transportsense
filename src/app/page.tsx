@@ -1,17 +1,24 @@
 "use client";
 
+import { useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import LaunchOverlay from "@/components/LaunchOverlay";
 import CitySelector from "@/components/CitySelector";
 import { cities } from "@/constants/cities";
 import CityView from "@/components/CityView";
-import Loading from "@/components/Loading";
 
 export default function HomePage() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const step =
     (searchParams.get("step") as "launch" | "select" | "view") ?? "launch";
+
+  useEffect(() => {
+    if (!searchParams.get("step")) {
+      router.replace("?step=launch");
+    }
+  }, [searchParams, router]);
+
   const cityId = searchParams.get("city");
   const selectedCity = cities.find((c) => c.id === "city0");
 

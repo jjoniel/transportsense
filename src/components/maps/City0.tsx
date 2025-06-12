@@ -49,7 +49,7 @@ const City0 = (props: React.SVGProps<SVGSVGElement>) => (
         stroke="var(--white)"
         strokeLinecap="butt"
         strokeLinejoin="round"
-        strokeWidth={3}
+        strokeWidth={4}
         d="M324.966 431.538H24.367"
       />
       <path fill="none" d="M27.273 260.35h113.921" />
@@ -75,14 +75,6 @@ const City0 = (props: React.SVGProps<SVGSVGElement>) => (
         strokeLinejoin="round"
         strokeWidth={4}
         d="M140.129 260.35H253.23"
-      />
-      <path fill="none" d="M254.268 165.094h491.716" />
-      <path
-        stroke="var(--white)"
-        strokeLinecap="butt"
-        strokeLinejoin="round"
-        strokeWidth={4}
-        d="M254.268 165.094h491.716"
       />
       <path fill="none" d="M139.88 165.094v95.245" />
       <path
@@ -279,7 +271,7 @@ const City0 = (props: React.SVGProps<SVGSVGElement>) => (
         stroke="var(--white)"
         strokeLinecap="butt"
         strokeLinejoin="round"
-        strokeWidth={3}
+        strokeWidth={4}
         d="M470.392 676.43h153.984"
       />
       <path fill="none" d="M622.785 676.43h77.985" />
@@ -287,7 +279,7 @@ const City0 = (props: React.SVGProps<SVGSVGElement>) => (
         stroke="var(--white)"
         strokeLinecap="butt"
         strokeLinejoin="round"
-        strokeWidth={3}
+        strokeWidth={4}
         d="M622.785 676.43h77.985"
       />
       <path fill="none" d="M698.182 676.43h47.496" />
@@ -295,7 +287,7 @@ const City0 = (props: React.SVGProps<SVGSVGElement>) => (
         stroke="var(--white)"
         strokeLinecap="butt"
         strokeLinejoin="round"
-        strokeWidth={3}
+        strokeWidth={4}
         d="M698.182 676.43h47.496"
       />
       <path
@@ -507,6 +499,14 @@ const City0 = (props: React.SVGProps<SVGSVGElement>) => (
         strokeLinejoin="round"
         strokeWidth={4}
         d="M251.046 319.766h77.197"
+      />
+      <path fill="none" d="M254.268 165.094h491.716" />
+      <path
+        stroke="var(--white)"
+        strokeLinecap="butt"
+        strokeLinejoin="round"
+        strokeWidth={4}
+        d="M254.268 165.094h491.716"
       />
       <path
         fill="none"

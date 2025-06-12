@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Choice, conversationTree } from "./conversationData";
+import { Choice, conversationTree } from "@/data/conversationData";
 
 type Message = {
   id: number;

@@ -1,5 +1,10 @@
-import React from "react";
-import { ArrowLeftIcon } from "@heroicons/react/24/solid";
+import React, { useEffect, useState } from "react";
+import ChatInterface from "./ChatInterface";
+import {
+  calculateLaneMiles,
+  calculateSvgArea,
+  estimatePopulation,
+} from "../lib/mapcalculations";
 
 interface CityViewProps {
   city: { id: string; label: string };
@@ -8,25 +13,50 @@ interface CityViewProps {
 }
 
 const CityView: React.FC<CityViewProps> = ({ city, children, onBack }) => {
+  const [lengths, setLengths] = useState<{ [key: string]: number }>({});
+  const [svgArea, setSvgArea] = useState<number | null>(null);
+  const [estimatedPopulation, setEstimatedPopulation] = useState<number | null>(
+    null
+  );
+
+  useEffect(() => {
+    const paths = document.querySelectorAll("path");
+    setLengths(calculateLaneMiles(paths));
+
+    const svg = document.querySelector("svg");
+    if (svg && svg.viewBox) {
+      const area = calculateSvgArea(svg);
+      setSvgArea(area);
+      setEstimatedPopulation(estimatePopulation(area));
+    }
+  }, []);
+
   return (
     <div className="w-screen h-screen flex flex-col lg:flex-row bg-[var(--background)] animate-fade-in">
       <div className="lg:basis-1/3 w-full flex lg:flex-col flex-row justify-between lg:justify-start p-4 lg:h-full">
-        <div className="flex items-center justify-between w-full pt-3">
-          <button
-            onClick={onBack}
-            className="px-2 py-2 rounded-full text-white"
-          >
-            <ArrowLeftIcon className="w-5 h-5" />
-          </button>
-          <h1 className="text-white font-semibold text-center flex-1 text-4xl">
+        <div className="flex flex-col items-center lg:items-start w-full pt-3">
+          <h1 className="text-white text-center lg:text-left font-semibold flex-1 text-4xl lg:pl-2">
             {city.label}
           </h1>
-          <div className="w-10" /> {/* spacer to balance the button */}
+          {estimatedPopulation !== null && (
+            <p className="text-lg text-gray-300 mt-1 lg:pl-2">
+              Map Area Estimated Population:{" "}
+              {estimatedPopulation.toLocaleString()}
+            </p>
+          )}
         </div>
 
         {/* Content (position varies by screen size) */}
-        <div className="hidden lg:flex text-white mt-4 lg:mt-auto lg:mb-4">
-          some content will go here
+        <div className="hidden lg:flex text-white mt-4 lg:mt-auto lg:mb-4 flex-col space-y-2">
+          <div className="font-bold">Road Lengths:</div>
+          {Object.entries(lengths).map(([sw, len]) => (
+            <div key={sw}>
+              {sw === "8" ? "Highways" : "Local Roads"}: {len.toFixed(3)} lane
+              miles
+            </div>
+          ))}
+
+          <ChatInterface />
         </div>
       </div>
 
@@ -36,8 +66,15 @@ const CityView: React.FC<CityViewProps> = ({ city, children, onBack }) => {
           {children}
         </div>
       </div>
-      <div className="sm:hidden flex text-white mt-4 lg:mt-auto lg:mb-4">
-        some content will go here
+      <div className="sm:hidden flex text-white mt-4 lg:mt-auto lg:mb-4 flex-col space-y-2">
+        <div className="font-bold">Road Lengths:</div>
+        {Object.entries(lengths).map(([sw, len]) => (
+          <div key={sw}>
+            {sw === "8" ? "Highways" : "Local Roads"}: {len.toFixed(3)}{" "}
+            lane-miles d
+          </div>
+        ))}
+        <ChatInterface />
       </div>
     </div>
   );
