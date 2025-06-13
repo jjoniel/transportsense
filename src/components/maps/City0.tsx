@@ -14,6 +14,9 @@ const City0 = (props: React.SVGProps<SVGSVGElement>) => {
       <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="50 50 700 600"
+        width="100%"
+        height="100%"
+        preserveAspectRatio="none"
         strokeLinecap="round"
         strokeLinejoin="round"
         baseProfile="tiny"
