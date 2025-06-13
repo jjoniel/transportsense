@@ -88,7 +88,7 @@ const MetricsDisplay: React.FC = () => {
       label: "Annual Congestion Cost",
       value: scaledMetrics.scaledCost.toString(),
       unit: "$M",
-      description: "Total yearly economic impact of traffic, including fuel costs, lost time, and decreased productivity.",
+      description: "Yearly economic impact of traffic, including fuel costs, lost time, and decreased productivity.",
     //   icon: "💰"
     },
     {
@@ -113,10 +113,10 @@ const MetricsDisplay: React.FC = () => {
         {[...Array(4)].map((_, index) => (
           <div
             key={index}
-            className="bg-gradient-to-br from-[#1a1a1a] to-[#2a2a2a] rounded-lg p-4 shadow-lg border border-[#333] flex flex-col items-center justify-center min-h-[100px] animate-[pulse_2s_ease-in-out_infinite] md:hover:border-[#444]"
+            className="bg-gradient-to-br from-[var(--surface)] to-[var(--surface-light)] rounded-lg p-4 shadow-lg border border-[var(--accent)]/20 flex flex-col items-center justify-center min-h-[100px] animate-[pulse_2s_ease-in-out_infinite] md:hover:border-[var(--accent)]/40"
           >
-            <div className="h-4 w-16 bg-[#333] rounded mb-2"></div>
-            <div className="h-6 w-12 bg-[#333] rounded"></div>
+            <div className="h-4 w-16 bg-[var(--accent)]/20 rounded mb-2"></div>
+            <div className="h-6 w-12 bg-[var(--accent)]/20 rounded"></div>
           </div>
         ))}
       </div>
@@ -129,18 +129,17 @@ const MetricsDisplay: React.FC = () => {
         <div
           key={index}
           onClick={() => handleMetricTap(index)}
-          className="bg-gradient-to-br from-[var(--accent)]/10 to-[var(--background)]
+          className="bg-gradient-to-br from-[var(--surface)] to-[var(--surface-light)]
                      rounded-lg p-4 border border-[var(--accent)]/20 shadow-lg
-                     flex flex-col items-center justify-center min-h-[100px]
-                     cursor-pointer select-none relative group
-                     md:backdrop-blur-sm md:cursor-help md:transition-all md:duration-300
-                     md:hover:border-[var(--accent)]/40 md:hover:from-[var(--accent)]/20 md:hover:to-[var(--background)]"
+                     select-none cursor-pointer transition-all duration-200
+                     relative flex flex-col items-center justify-center min-h-[100px]
+                     md:hover:border-[var(--accent)]/40 md:hover:from-[var(--accent-light)]/10 md:hover:to-[var(--surface-light)]"
         >
-          <div className="text-sm text-center mb-2">{metric.label}</div>
-          <div className="text-xl font-semibold text-center">
+          <div className="text-sm text-center mb-2 text-[var(--white)]/80">{metric.label}</div>
+          <div className="text-xl font-semibold text-center text-[var(--accent-light)]">
             {metric.value} {metric.unit}
           </div>
-          <div className={`pointer-events-none z-50 text-white text-center max-w-[280px] rounded-lg bg-black/90
+          <div className={`pointer-events-none z-50 text-[var(--white)] text-center max-w-[280px] rounded-lg bg-[var(--surface)]/95
                           ${index === tappedIndex ?
                             'fixed left-1/2 -translate-x-1/2 top-4 w-[90%] p-3 opacity-100' :
                             'absolute opacity-0 transition-opacity duration-200 left-0 right-0 p-2 mx-auto hidden md:block group-hover:opacity-100 ' +

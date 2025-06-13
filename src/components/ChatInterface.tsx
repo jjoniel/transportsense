@@ -68,7 +68,7 @@ const ChatInterface: React.FC = () => {
             >
               <p
                 className={`rounded-lg px-4 py-2 max-w-[85%] text-sm ${
-                  message.sender === "user" ? "bg-[var(--accent)]" : "bg-[#222]"
+                  message.sender === "user" ? "bg-[var(--accent)]" : "bg-[var(--surface)]"
                 }`}
               >
                 {message.text}
@@ -79,13 +79,13 @@ const ChatInterface: React.FC = () => {
         <div ref={messagesEndRef} />
       </div>
 
-      <div className="p-4 border-t border-gray-700 shrink-0">
+      <div className="p-4 border-t border-[var(--surface-light)] shrink-0">
         <div className="space-y-2">
           {currentChoices.map((choice, index) => (
             <button
               key={index}
               onClick={() => handleOptionClick(choice)}
-              className="w-full px-4 py-2 bg-transparent border border-[var(--accent)] rounded-lg text-left hover:bg-[var(--accent)]"
+              className="w-full px-4 py-2 bg-transparent border border-[var(--accent)] rounded-lg text-left hover:bg-[var(--accent-light)] transition-colors duration-200"
             >
               {choice.text}
             </button>

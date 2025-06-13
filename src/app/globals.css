@@ -2,9 +2,13 @@
 
 /* Root CSS Variables */
 :root {
-  --black: #111111;
-  --white: #e8e9f3;
-  --accent: #eb1043;
+  --black: #1a1f2e;
+  --white: #f5f6fa;
+  --accent: #4f46e5;
+  --accent-light: #818cf8;
+  --accent-dark: #3730a3;
+  --surface: #252b3d;
+  --surface-light: #2f374d;
 }
 
 /* Tailwind-aware Theme Tokens */
