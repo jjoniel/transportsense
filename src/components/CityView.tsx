@@ -52,13 +52,14 @@ const CityView: React.FC<CityViewProps> = ({ city, children, onBack }) => {
 
         {/* Content for large screens */}
         <div className="hidden sm:flex text-white mt-4 flex-col space-y-2 flex-grow min-h-0">
-          <div className="font-bold">Road Lengths:</div>
-          {Object.entries(lengths).map(([sw, len]) => (
-            <div key={sw}>
-              {sw === "8" ? "Highways" : "Local Roads"}: {len.toFixed(3)} lane
-              miles
-            </div>
-          ))}
+          <div className="flex flex-wrap justify-center text-center gap-x-4 gap-y-1 border-gray-700 border-t border-b border-[var(--accent)] py-2">
+            {Object.entries(lengths).map(([sw, len]) => (
+              <span key={sw}>
+                {sw === "8" ? "Highways" : "Local Roads"}: {len.toFixed(3)}{" "}
+                lane-miles
+              </span>
+            ))}
+          </div>
           <div className="flex-grow min-h-0 mt-4">
             <ChatInterface />
           </div>
@@ -73,13 +74,15 @@ const CityView: React.FC<CityViewProps> = ({ city, children, onBack }) => {
       </div>
       {/* Content for small screens */}
       <div className="sm:hidden flex text-white p-4 flex-col space-y-2">
-        <div className="font-bold">Road Lengths:</div>
-        {Object.entries(lengths).map(([sw, len]) => (
-          <div key={sw}>
-            {sw === "8" ? "Highways" : "Local Roads"}: {len.toFixed(3)}{" "}
-            lane-miles d
-          </div>
-        ))}
+        <div className="flex flex-wrap justify-center text-center gap-x-4 gap-y-1 border-t border-gray-700 border-b border-[var(--accent)] py-2">
+          <span>Road Lengths:</span>
+          {Object.entries(lengths).map(([sw, len]) => (
+            <span key={sw}>
+              {sw === "8" ? "Highways" : "Local Roads"}: {len.toFixed(3)}{" "}
+              lane-miles
+            </span>
+          ))}
+        </div>
         {/* Wrapper to give chat a fixed height on mobile */}
         <div className="h-96 mt-4">
           <ChatInterface />

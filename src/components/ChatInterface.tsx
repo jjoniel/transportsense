@@ -67,7 +67,7 @@ const ChatInterface: React.FC = () => {
               }`}
             >
               <p
-                className={`rounded-lg px-4 py-2 max-w-[85%] text-sm ${
+                className={`rounded-2xl px-4 py-2 max-w-[85%] text-sm ${
                   message.sender === "user" ? "bg-[var(--accent)]" : "bg-[#222]"
                 }`}
               >
@@ -85,7 +85,7 @@ const ChatInterface: React.FC = () => {
             <button
               key={index}
               onClick={() => handleOptionClick(choice)}
-              className="w-full px-4 py-2 bg-transparent border border-[var(--accent)] rounded-lg text-left hover:bg-[var(--accent)]"
+              className="w-full px-4 py-2 bg-transparent border border-[var(--accent)] rounded-3xl text-left hover:bg-[var(--accent)]"
             >
               {choice.text}
             </button>

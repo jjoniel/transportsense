@@ -9,7 +9,7 @@ export default function LaunchOverlay({
 }) {
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
-      <div className="transparent px-4 py-8 sm:p-6 text-center w-full lg:w-[50%]">
+      <div className="transparent px-4 py-8 sm:p-6 text-center w-full sm:w-[50%]">
         <h1 className="text-3xl sm:text-4xl font-semibold mb-9 text-[var(--background)] font-serif">
           TransportSense
         </h1>
