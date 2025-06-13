@@ -57,7 +57,7 @@ const ChatInterface: React.FC = () => {
   const currentChoices = conversationTree[currentNodeId]?.choices || [];
 
   return (
-    <div className="flex flex-col h-full w-full text-white">
+    <div className="flex flex-col h-full w-full text-white border-t border-gray-700 pt-4">
       <div className="flex-grow p-1 space-y-4 overflow-y-auto">
         {messages.map((message) => (
           <div key={message.id}>
@@ -67,7 +67,7 @@ const ChatInterface: React.FC = () => {
               }`}
             >
               <p
-                className={`rounded-2xl px-4 py-2 max-w-[85%] text-sm ${
+                className={`rounded-2xl px-4 py-2 max-w-[85%] text-md ${
                   message.sender === "user" ? "bg-[var(--accent)]" : "bg-[#222]"
                 }`}
               >

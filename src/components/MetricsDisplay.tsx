@@ -124,7 +124,7 @@ const MetricsDisplay: React.FC = () => {
   }
 
   return (
-    <div className="grid grid-cols-2 gap-4 w-full mb-4 p-2">
+    <div className="grid grid-cols-2 gap-3 w-full mb-4 p-2">
       {metrics.map((metric, index) => (
         <React.Fragment key={index}>
           {index === 0 && (
@@ -145,8 +145,10 @@ const MetricsDisplay: React.FC = () => {
                  md:backdrop-blur-sm md:cursor-help md:transition-all md:duration-300
                  md:hover:border-[var(--accent)]/40 md:hover:from-[var(--accent)]/20 md:hover:to-[var(--background)]"
           >
-            <div className="text-sm text-center mb-2">{metric.label}</div>
-            <div className="text-xl font-semibold text-center">
+            <div className="text-sm lg:text-md text-center mb-2">
+              {metric.label}
+            </div>
+            <div className="text-xl lg:text-2xl font-semibold text-center">
               {metric.value} {metric.unit}
             </div>
 
