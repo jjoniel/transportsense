@@ -1,5 +1,16 @@
+"use client";
+
 import * as React from "react";
-const City0 = (props: React.SVGProps<SVGSVGElement>) => (
+import { useState } from "react";
+import CongestionPopup from "../CongestionPopup";
+
+const City0 = (props: React.SVGProps<SVGSVGElement>) => {
+  const [showPopup, setShowPopup] = useState(true);
+
+  //popup to show when user lands on the city view/chat page
+  return (
+    <>
+      {showPopup && <CongestionPopup onClose={() => setShowPopup(false)} />}
   <svg
     xmlns="http://www.w3.org/2000/svg"
     viewBox="50 50 700 600"
@@ -792,4 +803,8 @@ const City0 = (props: React.SVGProps<SVGSVGElement>) => (
     </g>
   </svg>
 );
+    </>
+  );
+};
+
 export default City0;
