@@ -13,11 +13,11 @@ export default function CitySelector({
   selectedCity,
 }: CitySelectorProps) {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-8 lg:py-16 animate-fade-in">
+    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-8 sm:py-16 animate-fade-in">
       <h2 className="text-xl font-semibold mb-6 font-serif">
         Choose a city to explore
       </h2>
-      <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6 w-full max-w-7xl">
+      <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-6 w-full max-w-7xl">
         {cities.map((city) => (
           <button
             key={city.id}
