@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import ChatInterface from "./ChatInterface";
 import MetricsDisplay from "./MetricsDisplay";
 import { calculateSvgArea, estimatePopulation } from "../lib/mapcalculations";
+import { useSearchParams } from "next/navigation";
+import introJs from "intro.js";
+import "intro.js/introjs.css";
 
 interface CityViewProps {
   city: { id: string; label: string };
@@ -30,24 +33,48 @@ const CityView: React.FC<CityViewProps> = ({ city, children, onBack }) => {
         <div className="flex flex-col items-center sm:items-start w-full pt-3">
           <div className="w-full flex justify-between items-start gap-4">
             <div>
-              <h1 className="text-white text-left font-semibold text-4xl sm:pl-2">
+              <h1
+                className="text-white text-left font-semibold text-4xl sm:pl-2"
+                data-intro="This is the city name you're viewing"
+                data-step="1"
+                data-tooltip-class="custom-tooltip"
+                data-highlight-class="custom-highlight"
+              >
                 {city.label}
               </h1>
               {estimatedPopulation !== null && (
-                <p className="text-lg text-gray-300 mt-1 sm:pl-2">
+                <p
+                  className="text-lg text-gray-300 mt-1 sm:pl-2"
+                  data-intro="Here we estimate the population of the city based on map area"
+                  data-step="2"
+                  data-tooltip-class="custom-tooltip"
+                  data-highlight-class="custom-highlight"
+                >
                   Map Area Population: {estimatedPopulation.toLocaleString()}
                 </p>
               )}
             </div>
           </div>
-          <div className="w-full mt-4 px-2">
+          <div
+            className="w-full mt-4 px-2"
+            data-intro="These are live metrics for the selected city"
+            data-step="3"
+            data-tooltip-class="custom-tooltip"
+            data-highlight-class="custom-highlight"
+          >
             <MetricsDisplay />
           </div>
         </div>
 
         {/* Content for large screens */}
         <div className="hidden sm:flex text-white flex-col space-y-2 flex-grow min-h-0">
-          <div className="flex-grow min-h-0 mt-4">
+          <div
+            className="flex-grow min-h-0 mt-4"
+            data-intro="Chat with the assistant here to learn more about the city"
+            data-step="4"
+            data-tooltip-class="custom-tooltip"
+            data-highlight-class="custom-highlight"
+          >
             <ChatInterface />
           </div>
         </div>
@@ -55,7 +82,13 @@ const CityView: React.FC<CityViewProps> = ({ city, children, onBack }) => {
 
       {/* Map Area */}
       <div className="sm:basis-2/3 w-full flex justify-end items-center">
-        <div className="w-full h-full max-w-[130vh] max-h-[130vh] overflow-hidden bg-(var(--black)) sm:border-l-10 sm:border-0 border-t-2 border-b-2 sm:border-[var(--accent)]">
+        <div
+          className="w-full h-full max-w-[130vh] max-h-[130vh] overflow-hidden bg-(var(--black)) sm:border-l-10 sm:border-0 border-t-2 border-b-2 sm:border-[var(--accent)]"
+          data-intro="This is the map view of your selected city"
+          data-step="5"
+          data-tooltip-class="custom-tooltip"
+          data-highlight-class="custom-highlight"
+        >
           {children}
         </div>
       </div>

@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
+import introJs from "intro.js";
 import LaunchOverlay from "@/components/LaunchOverlay";
 import CitySelector from "@/components/CitySelector";
 import { cities } from "@/constants/cities";
@@ -19,11 +20,28 @@ export default function HomePage() {
     }
   }, [searchParams, router]);
 
+  useEffect(() => {
+    const fromLaunch = searchParams.get("fromLaunch");
+    if (step === "view" && fromLaunch === "true") {
+      setTimeout(() => {
+        introJs()
+          .setOptions({
+            showBullets: false,
+          })
+          .start();
+        const params = new URLSearchParams(window.location.search);
+        params.delete("fromLaunch");
+        const newUrl = window.location.pathname + "?" + params.toString();
+        window.history.replaceState({}, "", newUrl);
+      }, 300);
+    }
+  }, [step, searchParams]);
+
   const cityId = searchParams.get("city");
   const selectedCity = cities.find((c) => c.id === "city0");
 
   const handleContinue = () => {
-    router.push("?step=view", { scroll: false });
+    router.push("?step=view&fromLaunch=true", { scroll: false });
   };
   const handleCitySelect = (city: (typeof cities)[number]) => {
     router.push(`?step=view&city=${city.id}`, { scroll: false });

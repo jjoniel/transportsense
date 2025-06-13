@@ -28,7 +28,7 @@ body {
 
 button {
   cursor: pointer;
-  transition: background-color 0.2s, transform 0.2s;
+  transition: background-color 0.2s;
 }
 
 @media (pointer: fine) {
@@ -57,4 +57,63 @@ button:active {
 /* Animation Utility Classes */
 .animate-fade-in {
   animation: fade-in 0.5s;
+}
+
+.custom-tooltip {
+  background-color: var(--black) !important;
+  color: var(--white) !important;
+  border-radius: 3rem !important;
+  text-align: center;
+  font-family: var(--font-roboto-condensed) !important;
+  padding: none !important;
+}
+
+.introjs-helperLayer {
+  border-radius: 2rem !important;
+}
+
+.introjs-tooltip-header {
+  display: none !important;
+}
+
+.introjs-tooltiptext {
+  font-family: var(--font-roboto-condensed) !important;
+  font-size: 1rem !important;
+  padding-top: 2rem !important;
+  padding-bottom: 0 !important;
+}
+
+.introjs-tooltipbuttons {
+  border: none !important;
+  font-family: var(--font-roboto-condensed) !important;
+}
+
+.introjs-button,
+.introjs-button:focus {
+  box-shadow: none !important;
+  cursor: pointer !important;
+  transition: background-color 0.2s, transform 0.2s !important;
+  border-radius: 2rem !important;
+  color: var(--white) !important;
+  background-color: transparent !important;
+  border: 1px solid var(--accent) !important;
+  text-shadow: none !important;
+}
+
+.introjs-button:hover,
+.introjs-button:active {
+  background-color: var(--accent) !important;
+  color: var(--white) !important;
+  border-radius: 2rem !important;
+  border: 1px solid var(--accent) !important;
+}
+
+.introjs-prevbutton {
+  display: none !important;
+}
+
+.introjs-tooltipbuttons {
+  display: flex !important;
+  justify-content: center !important;
+  gap: 1rem !important;
 }
