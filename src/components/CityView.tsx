@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ChatInterface from "./ChatInterface";
+import MetricsDisplay from "./MetricsDisplay";
 import {
   calculateLaneMiles,
   calculateSvgArea,
@@ -32,19 +33,22 @@ const CityView: React.FC<CityViewProps> = ({ city, children, onBack }) => {
   }, []);
 
   return (
-      <div className="w-screen h-screen flex flex-col lg:flex-row bg-[var(--background)] animate-fade-in">
-        <div className="lg:basis-1/3 w-full flex lg:flex-col flex-row justify-between lg:justify-start p-4 lg:h-full">
-          <div className="flex flex-col items-center lg:items-start w-full pt-3">
-            <h1 className="text-white text-center lg:text-left font-semibold flex-1 text-4xl lg:pl-2">
-              {city.label}
-            </h1>
-            {estimatedPopulation !== null && (
-                <p className="text-lg text-gray-300 mt-1 lg:pl-2">
-                  Map Area Estimated Population:{" "}
-                  {estimatedPopulation.toLocaleString()}
-                </p>
-            )}
-          </div>
+    <div className="w-screen h-screen flex flex-col lg:flex-row bg-[var(--background)] animate-fade-in">
+  <div className="lg:basis-1/3 w-full flex lg:flex-col flex-row justify-between lg:justify-start p-4 lg:h-full">
+    <div className="flex flex-col items-center lg:items-start w-full pt-3">
+      <h1 className="text-white text-center lg:text-left font-semibold flex-1 text-4xl lg:pl-2">
+        {city.label}
+      </h1>
+      {estimatedPopulation !== null && (
+        <p className="text-lg text-gray-300 mt-1 lg:pl-2">
+          Map Area Estimated Population:{" "}
+          {estimatedPopulation.toLocaleString()}
+        </p>
+      )}
+      <div className="w-full mt-4 px-2">
+        <MetricsDisplay />
+      </div>
+    </div>
 
           {/* Content for large screens */}
           <div className="hidden lg:flex text-white mt-4 flex-col space-y-2 flex-grow min-h-0">
