@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ChatInterface from "./ChatInterface";
+import MetricsDisplay from "./MetricsDisplay";
 import {
   calculateLaneMiles,
   calculateSvgArea,
@@ -44,6 +45,9 @@ const CityView: React.FC<CityViewProps> = ({ city, children, onBack }) => {
               {estimatedPopulation.toLocaleString()}
             </p>
           )}
+          <div className="w-full mt-4 px-2">
+            <MetricsDisplay />
+          </div>
         </div>
 
         {/* Content (position varies by screen size) */}

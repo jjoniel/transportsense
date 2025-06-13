@@ -18,7 +18,7 @@ export default function CongestionPopup({
         🚦 Washington DC: Fix the Traffic
         </h2>
         <p className="text-[var(--text)] mb-6">
-        This city is heavily congested. Your task is to improve traffic flow by adding or removing roads and lanes.
+        This city is heavily congested. Your task is to improve traffic flow by adding or removing roads.
         <br></br>
         <br></br>Each change affects the entire system — plan carefully to reduce delays.
         </p>
@@ -26,7 +26,7 @@ export default function CongestionPopup({
           onClick={onClose}
           className="px-4 py-2 bg-[var(--accent)] text-[var(--background)] rounded-md hover:opacity-90"
         >
-          Ok
+          Start
         </button>
         </div>
       </div>
