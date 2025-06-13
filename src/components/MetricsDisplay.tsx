@@ -19,12 +19,12 @@ type Metrics = {
 
 const MetricsDisplay: React.FC = () => {
   const [tappedIndex, setTappedIndex] = useState<number | null>(null);
-  //this is for mobile. when user taps on metric itll show description
+
   const handleMetricTap = (index: number) => {
-    //only for mobile (for web its hover)
+    // Only handle taps on mobile
     if (window.matchMedia('(max-width: 768px)').matches) {
       setTappedIndex(index);
-      setTimeout(() => setTappedIndex(null), 3000); //show description for 3 seconds
+      setTimeout(() => setTappedIndex(null), 4000);
     }
   };
   const [isLoading, setIsLoading] = useState(true);
@@ -39,8 +39,11 @@ const MetricsDisplay: React.FC = () => {
   //scaling the metrics for the size of our displayed city view, 
   // since the metrics fromt he dataset at for the entire city
   const scaleMetrics = (data: Metrics) => {
-    //gotta figure out the fmorula just dividing by 2 for now until we figure that out
-    const scaledFuel = Math.round(data.excessFuel / 2);
+
+    //gotta figure out the fmorula to scale the metrics, just dividing by 2 for now until we figure that out
+    
+    //im dividing excess fuel by a thousand because this metric from the db is in thousands of gallons
+    const scaledFuel = Math.round(data.excessFuel / 2) /1000; 
     const scaledCost = Math.round(data.congestionCost / 2);
     return {
       scaledFuel,
@@ -78,14 +81,14 @@ const MetricsDisplay: React.FC = () => {
       label: "Annual Excess Fuel",
       value: scaledMetrics.scaledFuel.toString(),
       unit: "gal",
-      description: "Extra fuel consumed annually due to traffic delays.",
+      description: "Extra fuel consumed annually due to traffic.",
     //   icon: "⛽"
     },
     {
       label: "Annual Congestion Cost",
       value: scaledMetrics.scaledCost.toString(),
       unit: "$M",
-      description: "Total yearly economic impact of traffic delays.",
+      description: "Total yearly economic impact of traffic, including fuel costs, lost time, and decreased productivity.",
     //   icon: "💰"
     },
     {
@@ -99,14 +102,14 @@ const MetricsDisplay: React.FC = () => {
       label: "Avg Delay",
       value: scaledMetrics.delayTime.toString(),
       unit: "min",
-      description: "Average time added to trips due to traffic delays.",
+      description: "Average time added to trips due to traffic.",
     //   icon: "⏳"
     }
   ];
   //this is if its loading, itll just be grayed out with an animation until the data is fetched from mongo
   if (isLoading) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full mb-4 p-2 pt-24 md:p-2 relative overflow-x-hidden">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full mb-4 p-2 relative overflow-x-hidden mt-20 md:mt-4">
         {[...Array(4)].map((_, index) => (
           <div
             key={index}
@@ -137,16 +140,14 @@ const MetricsDisplay: React.FC = () => {
           <div className="text-xl font-semibold text-center">
             {metric.value} {metric.unit}
           </div>
-          <div 
-          //hover the description on web when user hovers on metric with cursor
-            className={`pointer-events-none z-50 text-white text-center max-w-[280px] rounded-lg bg-black/90
-              ${index === tappedIndex
-                ? 'fixed left-1/2 -translate-x-1/2 bottom-4 w-[90%] p-3 opacity-100'
-                : 'absolute top-0 -translate-y-full opacity-0 transition-opacity duration-200 left-0 right-0 p-2 mx-auto hidden md:block group-hover:opacity-100'
-              }`
-            }>
+          <div className={`pointer-events-none z-50 text-white text-center max-w-[280px] rounded-lg bg-black/90
+                          ${index === tappedIndex ?
+                            'fixed left-1/2 -translate-x-1/2 top-4 w-[90%] p-3 opacity-100' :
+                            'absolute opacity-0 transition-opacity duration-200 left-0 right-0 p-2 mx-auto hidden md:block group-hover:opacity-100 ' +
+                            (index < 2 ? '-top-16' : 'bottom-full mb-2')
+                          }`}>
             {metric.description}
-            <div className="absolute hidden md:block bottom-[-8px] left-1/2 -translate-x-1/2 border-8 border-transparent border-t-black/90"></div>
+            <div className="absolute hidden md:block -bottom-2 left-1/2 -translate-x-1/2 border-8 border-transparent border-t-black/90"></div>
             <div className="absolute md:hidden -top-2 left-1/2 -translate-x-1/2 border-8 border-transparent border-b-black/90"></div>
           </div>
         </div>
