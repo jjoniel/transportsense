@@ -15,45 +15,47 @@ export type ConversationTree = {
 export const conversationTree: ConversationTree = {
   root: {
     botText:
-      "Welcome! This is a traffic flow simulation of a small area of Washington D.C. Press 'Start Simulation' to begin.",
+        "Welcome! This is a traffic simulation for a section of Washington D.C. Let's see how traffic forms. Press 'Start' to begin.",
     choices: [{ text: "Start Simulation", nextNode: "simulationStart" }],
   },
   simulationStart: {
     botText:
-      "Simulation started. Traffic conditions are forming on the roads...",
-    choices: [{ text: "Continue", nextNode: "trafficBuilds" }],
-  },
-  trafficBuilds: {
-    botText:
-      "Traffic is building up. Roads are turning yellow, orange... and now one road has turned red.",
-    choices: [{ text: "Continue", nextNode: "addLanePrompt" }],
-  },
-  addLanePrompt: {
-    botText:
-      "A traffic jam has occurred. Would you like to add a lane to the red road?",
-    choices: [{ text: "Add a lane", nextNode: "laneAdded" }],
+        "Traffic is building. As you can see, one road has become heavily congested (red), with nearby roads turning yellow. How should we address this?",
+    choices: [
+      { text: "Add a new lane to the red road", nextNode: "laneAdded" },
+    ],
   },
   laneAdded: {
     botText:
-      "A lane has been added. The road is now wider and the simulation continues.",
+        "A new lane has been added, and its stroke is now thicker. The traffic on that road has cleared up for now, turning green. Let's see what happens as the system adapts.",
     choices: [{ text: "Continue", nextNode: "trafficReturns" }],
   },
   trafficReturns: {
     botText:
-      "Despite the new lane, the same road is red again. This is explained by induced demand. Metrics updated with AI-calculated traffic flow.",
+        "Interesting. After a short time, the 'improved' road is congested again. More drivers are using it, causing the same traffic jam. This is 'Induced Demand'.",
     choices: [
-      { text: "Add another lane", nextNode: "laneAdded" },
-      { text: "Learn more", nextNode: "inducedDemandExplanation" },
+      { text: "Learn about Induced Demand", nextNode: "inducedDemandExplanation" },
+      { text: "Add another lane anyway", nextNode: "laneAddedAgain" },
+    ],
+  },
+  laneAddedAgain: {
+    botText:
+        "You've added another lane, but the problem persists. Adding road capacity often just invites more cars, without solving the root cause of congestion.",
+    choices: [
+      { text: "Explore real solutions", nextNode: "alternatives" },
+      { text: "Start Over", nextNode: "root" },
     ],
   },
   inducedDemandExplanation: {
     botText:
-      "Studies show that adding freeway lane miles often leads to increased traffic. Let's explore alternative solutions.",
-    choices: [{ text: "Explore Alternatives", nextNode: "alternatives" }],
+        "Induced demand is where increasing the supply of something (like roads) makes people use it more. New lanes fill up quickly, returning congestion to previous levels or worse.",
+    choices: [
+      { text: "What are the alternatives?", nextNode: "alternatives" },
+    ],
   },
   alternatives: {
     botText:
-      "Here are some issues and solutions from transportation studies: better public transit, demand management, and urban planning guidelines.",
-    choices: [{ text: "Start over", nextNode: "root" }],
+        "Effective solutions focus on managing demand and providing other options, like improving public transit, creating dedicated bike lanes, or congestion pricing. These strategies move more people, not just more cars.",
+    choices: [{ text: "Start Over", nextNode: "root" }],
   },
 };
