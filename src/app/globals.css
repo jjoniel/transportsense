@@ -69,7 +69,7 @@ button:active {
 }
 
 .introjs-helperLayer {
-  border-radius: 2rem !important;
+  border-radius: 1.5rem !important;
 }
 
 .introjs-tooltip-header {
@@ -116,4 +116,8 @@ button:active {
   display: flex !important;
   justify-content: center !important;
   gap: 1rem !important;
+}
+
+.introjs-arrow {
+  display: none !important;
 }

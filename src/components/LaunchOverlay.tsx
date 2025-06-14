@@ -16,6 +16,9 @@ export default function LaunchOverlay({
         <p className="text-base sm:text-lg text-[var(--background)] mb-9">
           Discover why traffic works the way it does — and how better design can
           change everything.
+          <br />
+          In this interactive experience, you can make policy decisions and
+          watch them play out in real time.
         </p>
         <button
           onClick={onContinue}

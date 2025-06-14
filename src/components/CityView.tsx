@@ -14,10 +14,10 @@ interface CityViewProps {
 const ORIGINAL_ROAD_COLOR = "var(--white)";
 const ORIGINAL_STROKE_WIDTH = "4";
 
-const CityView: React.FC<CityViewProps> = ({ city, children}) => {
+const CityView: React.FC<CityViewProps> = ({ city, children }) => {
   const [, setSvgArea] = useState<number | null>(null);
   const [estimatedPopulation, setEstimatedPopulation] = useState<number | null>(
-      null
+    null
   );
 
   const [redRoad, setRedRoad] = useState<SVGPathElement | null>(null);
@@ -33,9 +33,9 @@ const CityView: React.FC<CityViewProps> = ({ city, children}) => {
   }, []);
 
   const getAllRoads = () =>
-      document.querySelectorAll<SVGPathElement>(
-          'path[stroke="var(--white)"], path[stroke="#FFD700"], path[stroke="#FFA500"], path[stroke="#FF0000"], path[stroke="green"]'
-      );
+    document.querySelectorAll<SVGPathElement>(
+      'path[stroke="var(--white)"], path[stroke="#FFD700"], path[stroke="#FFA500"], path[stroke="#FF0000"], path[stroke="green"]'
+    );
 
   const resetSimulation = () => {
     const allRoads = getAllRoads();
@@ -64,8 +64,8 @@ const CityView: React.FC<CityViewProps> = ({ city, children}) => {
       setRedRoad(mainCongestedRoad);
 
       const secondaryCongestedRoads = shuffledRoads
-          .filter((r) => r !== mainCongestedRoad)
-          .slice(0, 3);
+        .filter((r) => r !== mainCongestedRoad)
+        .slice(0, 3);
       secondaryCongestedRoads.forEach((road) => {
         road.style.stroke = "#FFD700";
       });
@@ -80,7 +80,7 @@ const CityView: React.FC<CityViewProps> = ({ city, children}) => {
       redRoad.parentNode?.appendChild(redRoad);
       redRoad.style.stroke = "green";
       const currentWidth = parseInt(
-          redRoad.style.strokeWidth || ORIGINAL_STROKE_WIDTH
+        redRoad.style.strokeWidth || ORIGINAL_STROKE_WIDTH
       );
       redRoad.style.strokeWidth = `${currentWidth + 4}px`;
     }
@@ -121,77 +121,77 @@ const CityView: React.FC<CityViewProps> = ({ city, children}) => {
   };
 
   return (
-      <div className="w-screen h-screen flex flex-col sm:flex-row bg-[var(--background)] animate-fade-in">
-        <div className="sm:basis-1/3 w-full flex sm:flex-col flex-row justify-between sm:justify-start p-4 sm:h-full">
-          <div className="flex flex-col items-center sm:items-start w-full pt-3">
-            <div className="w-full flex justify-between items-start gap-4">
-              <div>
-                <h1
-                    className="text-white text-left font-semibold text-4xl sm:pl-2"
-                    data-intro="This is the city name you're viewing"
-                    data-step="1"
-                    data-tooltip-class="custom-tooltip"
-                    data-highlight-class="custom-highlight"
+    <div className="w-screen h-screen flex flex-col sm:flex-row bg-[var(--background)] animate-fade-in">
+      <div className="sm:basis-1/3 w-full flex sm:flex-col flex-row justify-between sm:justify-start p-4 sm:h-full">
+        <div className="flex flex-col items-center sm:items-start w-full pt-3">
+          <div className="w-full flex justify-between items-start gap-4">
+            <div>
+              <h1
+                className="text-white text-left font-semibold text-4xl sm:pl-2"
+                data-intro="In this simulation, you will be focusing on a small area of the the nation's capital."
+                data-step="1"
+                data-tooltip-class="custom-tooltip"
+                data-highlight-class="custom-highlight"
+              >
+                {city.label}
+              </h1>
+              {estimatedPopulation !== null && (
+                <p
+                  className="text-lg text-gray-300 mt-1 sm:pl-2"
+                  data-intro="The population of the area is shown here: it will change as the simulation progresses."
+                  data-step="2"
+                  data-tooltip-class="custom-tooltip"
+                  data-highlight-class="custom-highlight"
                 >
-                  {city.label}
-                </h1>
-                {estimatedPopulation !== null && (
-                    <p
-                        className="text-lg text-gray-300 mt-1 sm:pl-2"
-                        data-intro="Here we estimate the population of the city based on map area"
-                        data-step="2"
-                        data-tooltip-class="custom-tooltip"
-                        data-highlight-class="custom-highlight"
-                    >
-                      Map Area Population: {estimatedPopulation.toLocaleString()}
-                    </p>
-                )}
-              </div>
-            </div>
-            <div
-                className="w-full mt-4 px-2"
-                data-intro="These are live metrics for the selected city"
-                data-step="3"
-                data-tooltip-class="custom-tooltip"
-                data-highlight-class="custom-highlight"
-            >
-              <MetricsDisplay />
+                  Map Area Population: {estimatedPopulation.toLocaleString()}
+                </p>
+              )}
             </div>
           </div>
-
-          {/* Content for large screens */}
-          <div className="hidden sm:flex text-white flex-col space-y-2 flex-grow min-h-0">
-            <div
-                className="flex-grow min-h-0 mt-4"
-                data-intro="Chat with the assistant here to learn more about the city"
-                data-step="4"
-                data-tooltip-class="custom-tooltip"
-                data-highlight-class="custom-highlight"
-            >
-              <ChatInterface onChoiceSelect={handleChoiceSelect} />
-            </div>
-          </div>
-        </div>
-
-        {/* Map Area */}
-        <div className="sm:basis-2/3 w-full flex justify-end items-center">
           <div
-              className="w-full h-full max-w-[130vh] max-h-[130vh] overflow-hidden bg-(var(--black)) sm:border-l-10 sm:border-0 border-t-2 border-b-2 sm:border-[var(--accent)]"
-              data-intro="This is the map view of your selected city"
-              data-step="5"
-              data-tooltip-class="custom-tooltip"
-              data-highlight-class="custom-highlight"
+            className="w-full mt-4 px-2"
+            data-intro="These are live metrics for the simulation."
+            data-step="3"
+            data-tooltip-class="custom-tooltip"
+            data-highlight-class="custom-highlight"
           >
-            {children}
+            <MetricsDisplay />
           </div>
         </div>
-        {/* Content for small screens */}
-        <div className="sm:hidden flex text-white p-4 flex-col space-y-2">
-          <div className="h-96 mt-4">
+
+        {/* Content for large screens */}
+        <div className="hidden sm:flex text-white flex-col space-y-2 flex-grow min-h-0">
+          <div
+            className="flex-grow min-h-0 mt-4"
+            data-intro="This is the decision-making interface where you can interact with the simulation."
+            data-step="4"
+            data-tooltip-class="custom-tooltip"
+            data-highlight-class="custom-highlight"
+          >
             <ChatInterface onChoiceSelect={handleChoiceSelect} />
           </div>
         </div>
       </div>
+
+      {/* Map Area */}
+      <div className="sm:basis-2/3 w-full flex justify-end items-center">
+        <div
+          className="w-full h-full max-w-[130vh] max-h-[130vh] overflow-hidden bg-(var(--black)) sm:border-l-10 sm:border-0 border-t-2 border-b-2 sm:border-[var(--accent)]"
+          data-intro="This is the map of the simulation area. It shows the road network and will display the traffic conditions."
+          data-step="5"
+          data-tooltip-class="custom-tooltip"
+          data-highlight-class="custom-highlight"
+        >
+          {children}
+        </div>
+      </div>
+      {/* Content for small screens */}
+      <div className="sm:hidden flex text-white p-4 flex-col space-y-2">
+        <div className="h-96 mt-4">
+          <ChatInterface onChoiceSelect={handleChoiceSelect} />
+        </div>
+      </div>
+    </div>
   );
 };
 
