@@ -2,13 +2,16 @@
 
 /* Root CSS Variables */
 :root {
-  --black: #111111;
-  --white: #e8e9f3;
-  --accent: #eb1043;
+  --black: #1a1a2e;
+  --white: #f7f7f9;
+  --accent: #e94560;
+  --accent-light: #ff6b6b;
+  --accent-dark: #c92a43;
+  --overlay: rgba(26, 26, 46, 0.85);
 }
 
-/* Tailwind-aware Theme Tokens */
-@theme inline {
+/* Theme Tokens */
+:root {
   --color-background: var(--black);
   --color-foreground: var(--white);
   --color-accent: var(--accent);
@@ -60,12 +63,14 @@ button:active {
 }
 
 .custom-tooltip {
-  background-color: var(--black) !important;
+  background-color: var(--overlay) !important;
   color: var(--white) !important;
-  border-radius: 3rem !important;
+  border-radius: 1rem !important;
   text-align: center;
   font-family: var(--font-roboto-condensed) !important;
-  padding: none !important;
+  padding: 0.75rem 1.5rem !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+  backdrop-filter: blur(8px) !important;
 }
 
 .introjs-helperLayer {
@@ -79,8 +84,12 @@ button:active {
 .introjs-tooltiptext {
   font-family: var(--font-roboto-condensed) !important;
   font-size: 1rem !important;
-  padding-top: 2rem !important;
-  padding-bottom: 0 !important;
+  padding: 1.5rem !important;
+  color: var(--white) !important;
+  background-color: var(--overlay) !important;
+  border-radius: 1rem !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+  backdrop-filter: blur(8px) !important;
 }
 
 .introjs-tooltipbuttons {
@@ -92,20 +101,24 @@ button:active {
 .introjs-button:focus {
   box-shadow: none !important;
   cursor: pointer !important;
-  transition: background-color 0.2s, transform 0.2s !important;
-  border-radius: 2rem !important;
+  transition: all 0.2s ease !important;
+  border-radius: 1rem !important;
   color: var(--white) !important;
-  background-color: transparent !important;
-  border: 1px solid var(--accent) !important;
+  background-color: var(--accent) !important;
+  border: none !important;
   text-shadow: none !important;
+  padding: 0.5rem 1rem !important;
+  margin: 0.5rem !important;
 }
 
-.introjs-button:hover,
+.introjs-button:hover {
+  background-color: var(--accent-light) !important;
+  transform: translateY(-1px) !important;
+}
+
 .introjs-button:active {
-  background-color: var(--accent) !important;
-  color: var(--white) !important;
-  border-radius: 2rem !important;
-  border: 1px solid var(--accent) !important;
+  background-color: var(--accent-dark) !important;
+  transform: translateY(0) !important;
 }
 
 .introjs-prevbutton {

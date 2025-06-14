@@ -8,12 +8,12 @@ export default function LaunchOverlay({
   onContinue: () => void;
 }) {
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50">
-      <div className="transparent px-4 py-8 sm:p-6 text-center w-full sm:w-[50%]">
-        <h1 className="text-3xl sm:text-4xl font-semibold mb-9 text-[var(--background)] font-serif">
+    <div className="fixed inset-0 flex items-center justify-center z-50 bg-[var(--overlay)] backdrop-blur-md">
+      <div className="bg-[var(--black)] px-8 py-10 rounded-2xl shadow-xl max-w-2xl mx-4 border border-[var(--accent-light)] border-opacity-20">
+        <h1 className="text-4xl sm:text-5xl font-semibold mb-8 text-[var(--white)] font-serif animate-fade-in">
           TransportSense
         </h1>
-        <p className="text-base sm:text-lg text-[var(--background)] mb-9">
+        <p className="text-lg sm:text-xl text-[var(--white)] mb-10 leading-relaxed opacity-90">
           Discover why traffic works the way it does — and how better design can
           change everything.
           <br />
@@ -22,9 +22,9 @@ export default function LaunchOverlay({
         </p>
         <button
           onClick={onContinue}
-          className="px-4 py-2 bg-transparent border border-[var(--accent)] rounded-full [@media(hover:none)]:bg-[var(--accent)]"
+          className="px-6 py-3 bg-[var(--accent)] text-[var(--white)] rounded-xl hover:bg-[var(--accent-light)] active:bg-[var(--accent-dark)] transition-all duration-200 ease-in-out transform hover:-translate-y-1 active:translate-y-0 text-lg font-medium"
         >
-          explore
+          Explore Now
         </button>
       </div>
     </div>
