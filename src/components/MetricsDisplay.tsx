@@ -39,16 +39,24 @@ const MetricsDisplay: React.FC = () => {
   //scaling the metrics for the size of our displayed city view,
   // since the metrics fromt he dataset at for the entire city
   const scaleMetrics = (data: Metrics) => {
-    //gotta figure out the fmorula to scale the metrics, just dividing by 2 for now until we figure that out
+    // constants for our map area
+    const MAP_LOCAL_ROADS = 31.312; // miles
+    const MAP_HIGHWAYS = 31.262; // miles
+    const MAP_TOTAL_ROADS = MAP_LOCAL_ROADS + MAP_HIGHWAYS;
+    const MAP_POPULATION = 3500;
 
-    //im dividing excess fuel by a thousand because this metric from the db is in thousands of gallons
-    const scaledFuel = Math.round(data.excessFuel / 2) / 1000;
-    const scaledCost = Math.round(data.congestionCost / 2);
+    //scale metrics based on road length ratio - this represents what portion of DC's road network we're showing
+    const roadRatio = MAP_TOTAL_ROADS / 1500; //DC has approximately 1500 miles of roads total
+    
+    //scale both metrics by the road ratio
+    const scaledFuel = data.excessFuel * roadRatio; //keep units in thousands of gallons
+    const scaledCost = data.congestionCost * roadRatio; //keep units in millions
+
     return {
-      scaledFuel,
-      scaledCost,
-      travelTime: data.travelTime,
-      delayTime: data.delayTime,
+      scaledFuel: Math.round(scaledFuel).toLocaleString(), //round and add commas
+      scaledCost: Math.round(scaledCost).toLocaleString(),
+      travelTime: data.travelTime, //leave travel time as is for now
+      delayTime: data.delayTime, //leave delay time as is for now
     };
   };
 
@@ -77,7 +85,7 @@ const MetricsDisplay: React.FC = () => {
   //metrics displayed at the top
   const metrics: Metric[] = [
     {
-      label: "fuel wasted per vehicle",
+      label: "fuel wasted",
       value: scaledMetrics.scaledFuel.toString(),
       unit: "gal",
       description: "Extra fuel consumed annually due to traffic.",
