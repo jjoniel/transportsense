@@ -26,40 +26,72 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onChoiceSelect }) => {
 
   const [currentNodeId, setCurrentNodeId] = useState<string>("root");
   const [nextId, setNextId] = useState(2);
+  const [isLoading, setIsLoading] = useState(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
   useEffect(() => {
-    scrollToBottom();
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  const handleOptionClick = (choice: Choice) => {
-    if (onChoiceSelect) {
-      onChoiceSelect(choice);
-    }
+  const handleOptionClick = async (choice: Choice) => {
+    onChoiceSelect?.(choice);
 
     const userMessage: Message = {
       id: nextId,
       sender: "user",
       text: choice.text,
     };
+    setMessages((prevMessages) => [...prevMessages, userMessage]);
+    setIsLoading(true);
 
     const nextNode = conversationTree[choice.nextNode];
-    if (!nextNode) return;
+    if (!nextNode) {
+      setIsLoading(false);
+      return;
+    }
 
-    const botResponse: Message = {
-      id: nextId + 1,
-      sender: "bot",
-      text: nextNode.botText,
+    const promptData = {
+      userAction: choice.text,
+      nextPhase: nextNode.botText,
     };
 
-    setMessages((prevMessages) => [...prevMessages, userMessage, botResponse]);
-    setCurrentNodeId(choice.nextNode);
-    setNextId((prevId) => prevId + 2);
+    try {
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ prompt: promptData }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch AI response');
+      }
+
+      const data = await response.json();
+
+      const botResponse: Message = {
+        id: nextId + 1,
+        sender: "bot",
+        text: data.text,
+      };
+
+      setMessages((prevMessages) => [...prevMessages, botResponse]);
+
+    } catch (error) {
+      console.error("Error with Gemini integration:", error);
+      const fallbackResponse: Message = {
+        id: nextId + 1,
+        sender: "bot",
+        text: nextNode.botText,
+      };
+      setMessages((prevMessages) => [...prevMessages, fallbackResponse]);
+    } finally {
+      setCurrentNodeId(choice.nextNode);
+      setNextId((prevId) => prevId + 2);
+      setIsLoading(false);
+    }
   };
 
   const currentChoices = conversationTree[currentNodeId]?.choices || [];
@@ -84,6 +116,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onChoiceSelect }) => {
                 </div>
               </div>
           ))}
+          {isLoading && <p className="text-center text-gray-400 text-sm">Assistant is thinking...</p>}
           <div ref={messagesEndRef} />
         </div>
 
@@ -93,7 +126,8 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onChoiceSelect }) => {
                 <button
                     key={index}
                     onClick={() => handleOptionClick(choice)}
-                    className="w-full px-4 py-2 bg-transparent border border-[var(--accent)] rounded-3xl text-left hover:bg-[var(--accent)]"
+                    disabled={isLoading}
+                    className="w-full px-4 py-2 bg-transparent border border-[var(--accent)] rounded-3xl text-left hover:bg-[var(--accent)] disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {choice.text}
                 </button>
