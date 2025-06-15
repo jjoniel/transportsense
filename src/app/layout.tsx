@@ -5,6 +5,7 @@ import {
   Domine,
   Bebas_Neue,
   Roboto_Condensed,
+  DM_Sans,
 } from "next/font/google";
 import "./globals.css";
 
@@ -15,6 +16,11 @@ const geistSans = Geist({
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
+
+const dmSans = DM_Sans({
+  variable: "--font-dm-sans",
   subsets: ["latin"],
 });
 
@@ -48,7 +54,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${domine.variable} ${bebas.variable} ${robotoCondensed.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${domine.variable} ${bebas.variable} ${robotoCondensed.variable} ${dmSans.variable} antialiased`}
       >
         {children}
       </body>
