@@ -20,6 +20,31 @@ type Metrics = {
 type Phase = 'initialPhase' | 'simulationStart' | 'laneAdded' | 'trafficReturns' | 'paradoxExplanation' | 'laneAddedAgain' | 'solutionExplanation';
 
 const MetricsDisplay: React.FC<{ currentPhase: Phase }> = ({ currentPhase }) => {
+  const getMetricColor = (metric: Metric, index: number, initialMetrics: Metrics) => {
+    //extract just the number from the metric value (removes currency symbol, comma)
+    const currentValue = Number(metric.value.replace(/[^0-9.-]/g, ''));
+    let initialValue: number;
+
+    if (index < 2) {
+      //first two metrics are fuel and cost, which use scaled values
+      const metricKey = index === 0 ? 'scaledFuel' : 'scaledCost';
+      //get the initial scaled value and convert it to a clean number
+      initialValue = Number(scaleMetrics(initialMetrics)[metricKey].toString().replace(/[^0-9.-]/g, ''));
+    } else {
+      //last two metrics are travel time and delay time, which use raw values that we calcualte
+      const metricKey = index === 2 ? 'travelTime' : 'delayTime';
+      //these values are already numbers, so we can use them directly
+      initialValue = initialMetrics[metricKey];
+    }
+
+    //return red if metric increased from initial value
+    if (currentValue > initialValue) return 'text-red-500';
+    //return green if metric decreased from initial value
+    if (currentValue < initialValue) return 'text-green-500';
+    //return empty string (no color change) if values are equal
+    return '';
+  };
+
   const [tappedIndex, setTappedIndex] = useState<number | null>(null);
 
   const handleMetricTap = (index: number) => {
@@ -85,6 +110,7 @@ const MetricsDisplay: React.FC<{ currentPhase: Phase }> = ({ currentPhase }) => 
     }
   };
 
+  const [initialMetrics, setInitialMetrics] = useState<Metrics | null>(null);
   const [metricsData, setMetricsData] = useState<Metrics>({
     excessFuel: 10,
     congestionCost: 10,
@@ -130,6 +156,9 @@ const MetricsDisplay: React.FC<{ currentPhase: Phase }> = ({ currentPhase }) => 
         if (response.ok) {
           const data = await response.json();
           setMetricsData(data);
+          if (!initialMetrics) {
+            setInitialMetrics(data); // Store initial metrics on first load
+          }
         }
       } catch (error) {
         console.error("Error fetching metrics:", error);
@@ -217,7 +246,10 @@ const MetricsDisplay: React.FC<{ currentPhase: Phase }> = ({ currentPhase }) => 
             <div className="text-sm lg:text-md text-center mb-2">
               {metric.label}
             </div>
-            <div className="text-xl lg:text-2xl font-semibold text-center">
+            <div 
+              className={`text-xl lg:text-2xl font-semibold text-center ${initialMetrics ? 
+                getMetricColor(metric, index, initialMetrics) : ''}`}
+            >
               {metric.value} {metric.unit}
             </div>
 
