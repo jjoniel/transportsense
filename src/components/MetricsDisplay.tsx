@@ -183,12 +183,19 @@ const MetricsDisplay: React.FC<{ currentPhase: Phase }> = ({ currentPhase }) => 
     if (apiData.rawData) {
       //calculate new metrics based on current state
       const newMetrics = calculateMetrics(apiData.rawData, apiData.totalLaneMiles);
-      const updatedMetrics = updateMetricsForPhase(newMetrics, currentPhase);
-      setMetricsData(updatedMetrics);
       
-      //save initial state when simulation starts for color comparison
-      if (currentPhase === 'simulationStart' && !initialMetrics) {
-        setInitialMetrics(newMetrics);
+      //reset metrics and initial state when returning to initial phase
+      if (currentPhase === 'initialPhase') {
+        setInitialMetrics(null);
+        setMetricsData(newMetrics);
+      } else {
+        const updatedMetrics = updateMetricsForPhase(newMetrics, currentPhase);
+        setMetricsData(updatedMetrics);
+        
+        //save initial state when simulation starts
+        if (currentPhase === 'simulationStart' && !initialMetrics) {
+          setInitialMetrics(newMetrics);
+        }
       }
     }
   }, [currentPhase, apiData.totalLaneMiles, apiData.rawData, initialMetrics]);

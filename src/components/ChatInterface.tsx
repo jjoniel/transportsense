@@ -40,6 +40,19 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onChoiceSelect, onPhaseCh
   const handleOptionClick = async (choice: Choice) => {
     onChoiceSelect?.(choice);
 
+    //if starting over, reset chat and metrics without AI query
+    if (choice.nextNode === 'initialPhase') {
+      setMessages([{
+        id: 1,
+        sender: "bot",
+        text: initialNode.botText,
+      }]);
+      setCurrentNodeId('initialPhase');
+      setNextId(2);
+      onPhaseChange?.('initialPhase');
+      return;
+    }
+
     const userMessage: Message = {
       id: nextId,
       sender: "user",
@@ -81,7 +94,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onChoiceSelect, onPhaseCh
       };
 
       setMessages((prevMessages) => [...prevMessages, botResponse]);
-      // Update metrics after AI response
       onPhaseChange?.(currentNodeId as Phase);
 
     } catch (error) {
@@ -92,7 +104,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onChoiceSelect, onPhaseCh
         text: nextNode.botText,
       };
       setMessages((prevMessages) => [...prevMessages, fallbackResponse]);
-      // Update metrics even if we use fallback response
       onPhaseChange?.(currentNodeId as Phase);
     } finally {
       setCurrentNodeId(choice.nextNode);
