@@ -9,13 +9,16 @@ type Message = {
   text: string;
 };
 
+type Phase = 'initialPhase' | 'simulationStart' | 'laneAdded' | 'trafficReturns' | 'paradoxExplanation' | 'laneAddedAgain' | 'solutionExplanation';
+
 interface ChatInterfaceProps {
   onChoiceSelect?: (choice: Choice) => void;
+  onPhaseChange?: (phase: Phase) => void;
 }
 
-const initialNode = conversationTree["root"];
+const initialNode = conversationTree["initialPhase"];
 
-const ChatInterface: React.FC<ChatInterfaceProps> = ({ onChoiceSelect }) => {
+const ChatInterface: React.FC<ChatInterfaceProps> = ({ onChoiceSelect, onPhaseChange }) => {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 1,
@@ -24,7 +27,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onChoiceSelect }) => {
     },
   ]);
 
-  const [currentNodeId, setCurrentNodeId] = useState<string>("root");
+  const [currentNodeId, setCurrentNodeId] = useState<string>("initialPhase");
   const [nextId, setNextId] = useState(2);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -78,6 +81,8 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onChoiceSelect }) => {
       };
 
       setMessages((prevMessages) => [...prevMessages, botResponse]);
+      // Update metrics after AI response
+      onPhaseChange?.(currentNodeId as Phase);
 
     } catch (error) {
       console.error("Error with Gemini integration:", error);
@@ -87,6 +92,8 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onChoiceSelect }) => {
         text: nextNode.botText,
       };
       setMessages((prevMessages) => [...prevMessages, fallbackResponse]);
+      // Update metrics even if we use fallback response
+      onPhaseChange?.(currentNodeId as Phase);
     } finally {
       setCurrentNodeId(choice.nextNode);
       setNextId((prevId) => prevId + 2);

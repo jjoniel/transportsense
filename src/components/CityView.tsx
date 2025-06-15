@@ -14,7 +14,10 @@ interface CityViewProps {
 const ORIGINAL_ROAD_COLOR = "var(--white)";
 const ORIGINAL_STROKE_WIDTH = "4";
 
+type Phase = 'initialPhase' | 'simulationStart' | 'laneAdded' | 'trafficReturns' | 'paradoxExplanation' | 'laneAddedAgain' | 'solutionExplanation';
+
 const CityView: React.FC<CityViewProps> = ({ city, children }) => {
+  const [currentPhase, setCurrentPhase] = useState<Phase>('initialPhase');
   const [, setSvgArea] = useState<number | null>(null);
   const [estimatedPopulation, setEstimatedPopulation] = useState<number | null>(
     null
@@ -155,7 +158,7 @@ const CityView: React.FC<CityViewProps> = ({ city, children }) => {
             data-tooltip-class="custom-tooltip"
             data-highlight-class="custom-highlight"
           >
-            <MetricsDisplay />
+            <MetricsDisplay currentPhase={currentPhase} />
           </div>
         </div>
 
@@ -168,7 +171,10 @@ const CityView: React.FC<CityViewProps> = ({ city, children }) => {
             data-tooltip-class="custom-tooltip"
             data-highlight-class="custom-highlight"
           >
-            <ChatInterface onChoiceSelect={handleChoiceSelect} />
+            <ChatInterface 
+              onChoiceSelect={handleChoiceSelect}
+              onPhaseChange={(phase) => setCurrentPhase(phase)}
+            />
           </div>
         </div>
       </div>
@@ -188,7 +194,10 @@ const CityView: React.FC<CityViewProps> = ({ city, children }) => {
       {/* Content for small screens */}
       <div className="sm:hidden flex text-white p-4 flex-col space-y-2">
         <div className="h-96 mt-4">
-          <ChatInterface onChoiceSelect={handleChoiceSelect} />
+          <ChatInterface 
+            onChoiceSelect={handleChoiceSelect}
+            onPhaseChange={(phase) => setCurrentPhase(phase)}
+          />
         </div>
       </div>
     </div>

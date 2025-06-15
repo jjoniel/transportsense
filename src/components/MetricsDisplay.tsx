@@ -17,7 +17,9 @@ type Metrics = {
   delayTime: number;
 };
 
-const MetricsDisplay: React.FC = () => {
+type Phase = 'initialPhase' | 'simulationStart' | 'laneAdded' | 'trafficReturns' | 'paradoxExplanation' | 'laneAddedAgain' | 'solutionExplanation';
+
+const MetricsDisplay: React.FC<{ currentPhase: Phase }> = ({ currentPhase }) => {
   const [tappedIndex, setTappedIndex] = useState<number | null>(null);
 
   const handleMetricTap = (index: number) => {
@@ -29,6 +31,60 @@ const MetricsDisplay: React.FC = () => {
   };
   const [isLoading, setIsLoading] = useState(true);
   //these r just random metrics as the default, they won't be shown though
+  // Update metrics based on the current phase
+  const updateMetricsForPhase = (currentMetrics: Metrics, phase: Phase): Metrics => {
+    // Update metrics based on the completed phase's effects
+    switch (phase) {
+      case 'initialPhase':
+        // Initial state - no changes
+        return currentMetrics;
+      case 'simulationStart':
+        // User has seen initial traffic build up
+        return {
+          excessFuel: currentMetrics.excessFuel * 1.3,
+          congestionCost: currentMetrics.congestionCost * 1.4,
+          travelTime: currentMetrics.travelTime * 1.2,
+          delayTime: currentMetrics.delayTime * 1.5,
+        };
+      case 'laneAdded':
+        // User added a lane, seeing temporary improvement
+        return {
+          excessFuel: currentMetrics.excessFuel * 0.8,
+          congestionCost: currentMetrics.congestionCost * 0.9,
+          travelTime: currentMetrics.travelTime * 0.9,
+          delayTime: currentMetrics.delayTime * 0.7,
+        };
+      case 'trafficReturns':
+        // Traffic has returned worse due to induced demand
+        return {
+          excessFuel: currentMetrics.excessFuel * 1.4,
+          congestionCost: currentMetrics.congestionCost * 1.5,
+          travelTime: currentMetrics.travelTime * 1.3,
+          delayTime: currentMetrics.delayTime * 1.6,
+        };
+      case 'paradoxExplanation':
+        // Learning about induced demand - metrics stay the same
+        return currentMetrics;
+      case 'laneAddedAgain':
+        // Second lane added, making things even worse
+        return {
+          excessFuel: currentMetrics.excessFuel * 1.6,
+          congestionCost: currentMetrics.congestionCost * 1.7,
+          travelTime: currentMetrics.travelTime * 1.5,
+          delayTime: currentMetrics.delayTime * 1.8,
+        };
+      case 'solutionExplanation':
+        return {
+          excessFuel: currentMetrics.excessFuel * 0.6, // Better solutions help
+          congestionCost: currentMetrics.congestionCost * 0.7,
+          travelTime: currentMetrics.travelTime * 0.8,
+          delayTime: currentMetrics.delayTime * 0.6,
+        };
+      default:
+        return currentMetrics;
+    }
+  };
+
   const [metricsData, setMetricsData] = useState<Metrics>({
     excessFuel: 10,
     congestionCost: 10,
@@ -59,6 +115,11 @@ const MetricsDisplay: React.FC = () => {
       delayTime: data.delayTime, //leave delay time as is for now
     };
   };
+
+  useEffect(() => {
+    // Update metrics whenever the phase changes
+    setMetricsData(prevMetrics => updateMetricsForPhase(prevMetrics, currentPhase));
+  }, [currentPhase]);
 
   useEffect(() => {
     //fetch metrics from mongodb
