@@ -35,12 +35,12 @@ export const conversationTree: ConversationTree = {
         "Interesting. After a short time, the 'improved' road is congested again. More drivers are using it, causing the same traffic jam. This is 'Induced Demand'.",
     choices: [
       { text: "Learn about Induced Demand", nextNode: "paradoxExplanation" },
-      { text: "Add another lane anyway", nextNode: "laneAddedAgain" },
+      { text: "Remove a lane instead", nextNode: "removeRoad" },
     ],
   },
-  laneAddedAgain: {
+  removeRoad: {
     botText:
-        "You've added another lane, but the problem persists. Adding road capacity often just invites more cars, without solving the root cause of congestion.",
+        "You've removed a lane, making the road narrower. This concept, known as road diet, can actually improve traffic flow by encouraging alternative routes and transportation modes.",
     choices: [
       { text: "Explore real solutions", nextNode: "solutionExplanation" },
       { text: "Start Over", nextNode: "initialPhase" },

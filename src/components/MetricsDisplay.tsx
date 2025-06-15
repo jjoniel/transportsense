@@ -31,7 +31,7 @@ type Metrics = {
   delayTime: number;
 };
 
-type Phase = 'initialPhase' | 'simulationStart' | 'laneAdded' | 'trafficReturns' | 'paradoxExplanation' | 'laneAddedAgain' | 'solutionExplanation';
+type Phase = 'initialPhase' | 'simulationStart' | 'laneAdded' | 'trafficReturns' | 'paradoxExplanation' | 'removeRoad' | 'solutionExplanation';
 
 const MetricsDisplay: React.FC<{ currentPhase: Phase }> = ({ currentPhase }) => {
   const getMetricColor = (metric: Metric, index: number, initialMetrics: Metrics | null) => {
@@ -99,13 +99,13 @@ const MetricsDisplay: React.FC<{ currentPhase: Phase }> = ({ currentPhase }) => 
       case 'paradoxExplanation':
         // Learning about induced demand - metrics stay the same
         return currentMetrics;
-      case 'laneAddedAgain':
-        // Second lane added, making things even worse
+      case 'removeRoad':
+        // Lane removed, improving traffic flow
         return {
-          excessFuel: currentMetrics.excessFuel * 1.6,
-          congestionCost: currentMetrics.congestionCost * 1.7,
-          travelTime: currentMetrics.travelTime * 1.5,
-          delayTime: currentMetrics.delayTime * 1.8,
+          excessFuel: currentMetrics.excessFuel * 0.7,
+          congestionCost: currentMetrics.congestionCost * 0.8,
+          travelTime: currentMetrics.travelTime * 0.9,
+          delayTime: currentMetrics.delayTime * 0.7,
         };
       case 'solutionExplanation':
         return {
@@ -185,7 +185,7 @@ const MetricsDisplay: React.FC<{ currentPhase: Phase }> = ({ currentPhase }) => 
       const newMetrics = calculateMetrics(apiData.rawData, apiData.totalLaneMiles);
       
       //reset metrics and initial state when returning to initial phase
-      if (currentPhase === 'initialPhase') {
+      if (currentPhase === 'removeRoad') {
         setInitialMetrics(null);
         setMetricsData(newMetrics);
       } else {

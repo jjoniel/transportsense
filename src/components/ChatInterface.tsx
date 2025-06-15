@@ -9,7 +9,7 @@ type Message = {
   text: string;
 };
 
-type Phase = 'initialPhase' | 'simulationStart' | 'laneAdded' | 'trafficReturns' | 'paradoxExplanation' | 'laneAddedAgain' | 'solutionExplanation';
+type Phase = 'initialPhase' | 'simulationStart' | 'laneAdded' | 'trafficReturns' | 'paradoxExplanation' | 'removeRoad' | 'solutionExplanation';
 
 interface ChatInterfaceProps {
   onChoiceSelect?: (choice: Choice) => void;
