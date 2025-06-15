@@ -10,6 +10,20 @@ type Metric = {
   //   icon: string;
 };
 
+type RawData = {
+  excessFuel: number; // thousands of gallons
+  congestionCost: number; // million dollars
+  totalAnnualDelay: number; // thousands of person-hours
+  freewayDailyMiles: number; // thousands
+  localDailyMiles: number; // thousands
+  avgGasCost: number; // $/gallon
+};
+
+type ApiResponse = {
+  rawData: RawData | null;
+  totalLaneMiles: number;
+};
+
 type Metrics = {
   excessFuel: number;
   congestionCost: number;
@@ -20,22 +34,17 @@ type Metrics = {
 type Phase = 'initialPhase' | 'simulationStart' | 'laneAdded' | 'trafficReturns' | 'paradoxExplanation' | 'laneAddedAgain' | 'solutionExplanation';
 
 const MetricsDisplay: React.FC<{ currentPhase: Phase }> = ({ currentPhase }) => {
-  const getMetricColor = (metric: Metric, index: number, initialMetrics: Metrics) => {
+  const getMetricColor = (metric: Metric, index: number, initialMetrics: Metrics | null) => {
+    //don't color metrics in initial phase
+    if (currentPhase === 'initialPhase') return '';
+
     //extract just the number from the metric value (removes currency symbol, comma)
     const currentValue = Number(metric.value.replace(/[^0-9.-]/g, ''));
-    let initialValue: number;
-
-    if (index < 2) {
-      //first two metrics are fuel and cost, which use scaled values
-      const metricKey = index === 0 ? 'scaledFuel' : 'scaledCost';
-      //get the initial scaled value and convert it to a clean number
-      initialValue = Number(scaleMetrics(initialMetrics)[metricKey].toString().replace(/[^0-9.-]/g, ''));
-    } else {
-      //last two metrics are travel time and delay time, which use raw values that we calcualte
-      const metricKey = index === 2 ? 'travelTime' : 'delayTime';
-      //these values are already numbers, so we can use them directly
-      initialValue = initialMetrics[metricKey];
-    }
+    //get the corresponding initial value based on metric type
+    const metricKey = index === 0 ? 'excessFuel' : 
+                      index === 1 ? 'congestionCost' : 
+                      index === 2 ? 'travelTime' : 'delayTime';
+    const initialValue = initialMetrics?.[metricKey] ?? 0;
 
     //return red if metric increased from initial value
     if (currentValue > initialValue) return 'text-red-500';
@@ -111,6 +120,7 @@ const MetricsDisplay: React.FC<{ currentPhase: Phase }> = ({ currentPhase }) => 
   };
 
   const [initialMetrics, setInitialMetrics] = useState<Metrics | null>(null);
+  const [apiData, setApiData] = useState<ApiResponse>({ rawData: null, totalLaneMiles: 62.574 });
   const [metricsData, setMetricsData] = useState<Metrics>({
     excessFuel: 10,
     congestionCost: 10,
@@ -118,34 +128,70 @@ const MetricsDisplay: React.FC<{ currentPhase: Phase }> = ({ currentPhase }) => 
     delayTime: 5,
   });
 
-  //scaling the metrics for the size of our displayed city view,
-  // since the metrics fromt he dataset at for the entire city
-  const scaleMetrics = (data: Metrics) => {
-    // constants for our map area
-    const MAP_LOCAL_ROADS = 31.312; // miles
-    const MAP_HIGHWAYS = 31.262; // miles
-    const MAP_TOTAL_ROADS = MAP_LOCAL_ROADS + MAP_HIGHWAYS;
+  //calculate metrics using the formulas provided
+  const calculateMetrics = (rawData: RawData | null, totalLaneMiles: number): Metrics => {
+    
+    if (!rawData) return {
+      excessFuel: 0, //gallons per year
+      congestionCost: 0, //dollars per year
+      travelTime: 0, //minutes per mile
+      delayTime: 0 //minutes per mile
+    };
+
+    //scale metrics based on ratio of current lanes to dc's total lanes (1500)
+    const DC_TOTAL_LANE_MILES = 1500;
+    const scaleFactor = totalLaneMiles / DC_TOTAL_LANE_MILES;
     const MAP_POPULATION = 3500;
 
-    //scale metrics based on road length ratio - this represents what portion of DC's road network we're showing
-    const roadRatio = MAP_TOTAL_ROADS / 1500; //DC has approximately 1500 miles of roads total
-    
-    //scale both metrics by the road ratio
-    const scaledFuel = data.excessFuel * roadRatio; //keep units in thousands of gallons
-    const scaledCost = data.congestionCost * roadRatio; //keep units in millions
+    //total annual cost in millions, scaled by lane ratio
+    const congestionCost = rawData.congestionCost * scaleFactor;
 
+    //convert delay from annual hours to minutes per mile per day, scaled by lane miles, commuter population (assumed 1500)
+    const delayTime = (((rawData.totalAnnualDelay * 1000 * scaleFactor) / 365 / Math.max(totalLaneMiles, 1))/1500) * 60;
+
+    //calculate travel time based on traffic volume vs lane capacity
+    const NO_TRAFFIC_TIME = 1.33; //base time at 45mph (assumed), 1.33 = 60mins/45mph
+    const DEMAND_PER_LANE = 36000; //daily car capacity per lane (assumed)
+    const totalDailyMiles = (rawData.freewayDailyMiles + rawData.localDailyMiles) * 1000 * scaleFactor;
+    const travelTime = NO_TRAFFIC_TIME * totalDailyMiles / (DEMAND_PER_LANE * Math.max(totalLaneMiles, 1));
+
+    //total annual fuel waste in gallons per year, scaled by total lane miles
+    const excessFuel = (rawData.excessFuel * 1000 * scaleFactor) / Math.max(totalLaneMiles, 1);
+
+
+    // Ensure no NaN values in final results
     return {
-      scaledFuel: Math.round(scaledFuel).toLocaleString(), //round and add commas
-      scaledCost: Math.round(scaledCost).toLocaleString(),
-      travelTime: data.travelTime, //leave travel time as is for now
-      delayTime: data.delayTime, //leave delay time as is for now
+      excessFuel: isNaN(excessFuel) ? 0 : excessFuel,
+      congestionCost: isNaN(congestionCost) ? 0 : congestionCost,
+      travelTime: isNaN(travelTime) ? NO_TRAFFIC_TIME : travelTime,
+      delayTime: isNaN(delayTime) ? 0 : delayTime
     };
   };
 
+  const formatMetricValue = (value: number, index: number): string => {
+    if (index === 0) { //format fuel in gallons/year with commas
+      return Math.round(value).toLocaleString();
+    } else if (index === 1) { //format cost in dollars/year, no decimals
+      return `$${value.toFixed(0)}`;
+    } else { //format time in minutes/mile with two decimals
+      return value.toFixed(2);
+    }
+  };
+
   useEffect(() => {
-    // Update metrics whenever the phase changes
-    setMetricsData(prevMetrics => updateMetricsForPhase(prevMetrics, currentPhase));
-  }, [currentPhase]);
+    //update metrics when phase or lane miles change
+    if (apiData.rawData) {
+      //calculate new metrics based on current state
+      const newMetrics = calculateMetrics(apiData.rawData, apiData.totalLaneMiles);
+      const updatedMetrics = updateMetricsForPhase(newMetrics, currentPhase);
+      setMetricsData(updatedMetrics);
+      
+      //save initial state when simulation starts for color comparison
+      if (currentPhase === 'simulationStart' && !initialMetrics) {
+        setInitialMetrics(newMetrics);
+      }
+    }
+  }, [currentPhase, apiData.totalLaneMiles, apiData.rawData, initialMetrics]);
 
   useEffect(() => {
     //fetch metrics from mongodb
@@ -155,9 +201,10 @@ const MetricsDisplay: React.FC<{ currentPhase: Phase }> = ({ currentPhase }) => 
         const response = await fetch("/api/metrics");
         if (response.ok) {
           const data = await response.json();
-          setMetricsData(data);
-          if (!initialMetrics) {
-            setInitialMetrics(data); // Store initial metrics on first load
+          setApiData(data);
+          if (data.rawData) {
+            const calculatedMetrics = calculateMetrics(data.rawData, data.totalLaneMiles);
+            setMetricsData(calculatedMetrics);
           }
         }
       } catch (error) {
@@ -170,35 +217,33 @@ const MetricsDisplay: React.FC<{ currentPhase: Phase }> = ({ currentPhase }) => 
     //initial fetch the first time the user visits the page
     fetchMetrics();
   }, []);
-  //scale the metrics
-  const scaledMetrics = scaleMetrics(metricsData);
   //metrics displayed at the top
   const metrics: Metric[] = [
     {
       label: "fuel wasted",
-      value: scaledMetrics.scaledFuel.toString(),
+      value: formatMetricValue(metricsData.excessFuel, 0),
       unit: "gal",
       description: "Extra fuel consumed annually due to traffic.",
       //   icon: "⛽"
     },
     {
       label: "financial losses",
-      value: "$" + scaledMetrics.scaledCost.toString(),
+      value: formatMetricValue(metricsData.congestionCost, 1),
       unit: "million",
       description:
-        "Total yearly economic impact of traffic, including fuel costs, lost time, and decreased productivity.",
+        "Total annual economic impact, including fuel costs, lost time, and decreased productivity.",
       //   icon: "💰"
     },
     {
       label: "time to travel 1 mile",
-      value: scaledMetrics.travelTime.toString(),
+      value: formatMetricValue(metricsData.travelTime, 2),
       unit: "min",
       description: "Average time required to complete a typical journey.",
       //   icon: "⏱️"
     },
     {
       label: "average delay",
-      value: scaledMetrics.delayTime.toString(),
+      value: formatMetricValue(metricsData.delayTime, 3),
       unit: "min",
       description: "Average time added to trips due to traffic.",
       //   icon: "⏳"
