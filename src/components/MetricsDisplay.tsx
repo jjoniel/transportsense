@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import confetti from 'canvas-confetti';
+import confetti from "canvas-confetti";
 
 type Metric = {
   label: string;
@@ -32,9 +32,20 @@ type Metrics = {
   delayTime: number;
 };
 
-type Phase = 'initialPhase' | 'simulationStart' | 'laneAdded' | 'trafficReturns' | 'paradoxExplanation' | 'simulationReset' | 'laneRemoved' | 'trafficGone' | 'solutionExplanation';
+type Phase =
+  | "initialPhase"
+  | "simulationStart"
+  | "laneAdded"
+  | "trafficReturns"
+  | "paradoxExplanation"
+  | "simulationReset"
+  | "laneRemoved"
+  | "trafficGone"
+  | "solutionExplanation";
 
-const MetricsDisplay: React.FC<{ currentPhase: Phase }> = ({ currentPhase }) => {
+const MetricsDisplay: React.FC<{ currentPhase: Phase }> = ({
+  currentPhase,
+}) => {
   //celebrate when metrics improve
   const celebrateImprovement = () => {
     //first burst from bottom
@@ -42,7 +53,7 @@ const MetricsDisplay: React.FC<{ currentPhase: Phase }> = ({ currentPhase }) => 
       particleCount: 100,
       spread: 70,
       origin: { y: 0.6 },
-      colors: ['#22c55e', '#4ade80', '#86efac'] //green shades
+      colors: ["#22c55e", "#4ade80", "#86efac"], //green shades
     });
 
     //side bursts after delay
@@ -52,14 +63,14 @@ const MetricsDisplay: React.FC<{ currentPhase: Phase }> = ({ currentPhase }) => 
         particleCount: 50,
         angle: 60,
         spread: 55,
-        origin: { x: 0, y: 0.5 }
+        origin: { x: 0, y: 0.5 },
       });
       //right side
       confetti({
         particleCount: 50,
         angle: 120,
         spread: 55,
-        origin: { x: 1, y: 0.5 }
+        origin: { x: 1, y: 0.5 },
       });
     }, 300);
 
@@ -70,35 +81,44 @@ const MetricsDisplay: React.FC<{ currentPhase: Phase }> = ({ currentPhase }) => 
         spread: 100,
         origin: { y: 0 },
         gravity: 0.8,
-        colors: ['#22c55e', '#4ade80', '#86efac', '#ffffff']
+        colors: ["#22c55e", "#4ade80", "#86efac", "#ffffff"],
       });
     }, 600);
   };
 
-  const getMetricColor = (metric: Metric, index: number, initialMetrics: Metrics | null) => {
+  const getMetricColor = (
+    metric: Metric,
+    index: number,
+    initialMetrics: Metrics | null
+  ) => {
     //extract just the number from the metric value (removes currency symbol, comma)
-    const currentValue = Number(metric.value.replace(/[^0-9.-]/g, ''));
+    const currentValue = Number(metric.value.replace(/[^0-9.-]/g, ""));
     //get the corresponding initial value based on metric type
-    const metricKey = index === 0 ? 'excessFuel' : 
-                      index === 1 ? 'congestionCost' : 
-                      index === 2 ? 'travelTime' : 'delayTime';
+    const metricKey =
+      index === 0
+        ? "excessFuel"
+        : index === 1
+        ? "congestionCost"
+        : index === 2
+        ? "travelTime"
+        : "delayTime";
     const initialValue = initialMetrics?.[metricKey] ?? 0;
 
     //check if metric improved
     const improved = currentValue < initialValue;
 
     //only show colors in specific phases
-    if (currentPhase === 'laneRemoved') {
+    if (currentPhase === "laneRemoved") {
       //show green for improvements and celebrate
       if (improved && initialMetrics) {
         celebrateImprovement();
       }
-      return improved ? 'text-green-500' : '';
-    } else if (currentPhase === 'laneAdded') {
+      return improved ? "text-green-500" : "";
+    } else if (currentPhase === "laneAdded") {
       //show red for worsening metrics
-      return currentValue > initialValue ? 'text-red-500' : '';
+      return currentValue > initialValue ? "text-red-500" : "";
     } else {
-      return '';
+      return "";
     }
   };
 
@@ -114,16 +134,19 @@ const MetricsDisplay: React.FC<{ currentPhase: Phase }> = ({ currentPhase }) => 
   const [isLoading, setIsLoading] = useState(true);
   //these r just random metrics as the default, they won't be shown though
   // Update metrics based on the current phase
-  const updateMetricsForPhase = (currentMetrics: Metrics, phase: Phase): Metrics => {
+  const updateMetricsForPhase = (
+    currentMetrics: Metrics,
+    phase: Phase
+  ): Metrics => {
     // Update metrics based on the completed phase's effects
     switch (phase) {
-      case 'initialPhase':
+      case "initialPhase":
         // Initial state - no changes
         return currentMetrics;
-      case 'simulationStart':
+      case "simulationStart":
         // User has seen initial traffic build up
         return currentMetrics;
-      case 'laneAdded':
+      case "laneAdded":
         // User added a lane, seeing temporary improvement
         return {
           excessFuel: currentMetrics.excessFuel * 1.15,
@@ -131,13 +154,13 @@ const MetricsDisplay: React.FC<{ currentPhase: Phase }> = ({ currentPhase }) => 
           travelTime: currentMetrics.travelTime * 1.12,
           delayTime: currentMetrics.delayTime * 1.18,
         };
-      case 'trafficReturns':
+      case "trafficReturns":
         // Traffic has returned worse due to induced demand
         return currentMetrics;
-      case 'paradoxExplanation':
+      case "paradoxExplanation":
         // Learning about induced demand - metrics stay the same
         return currentMetrics;
-      case 'laneRemoved':
+      case "laneRemoved":
         // Traffic improved after lane removal
         return {
           excessFuel: currentMetrics.excessFuel * 0.85,
@@ -145,10 +168,10 @@ const MetricsDisplay: React.FC<{ currentPhase: Phase }> = ({ currentPhase }) => 
           travelTime: currentMetrics.travelTime * 0.9,
           delayTime: currentMetrics.delayTime * 0.88,
         };
-      case 'trafficGone':
+      case "trafficGone":
         // Keep improved metrics
         return currentMetrics;
-      case 'solutionExplanation':
+      case "solutionExplanation":
         return currentMetrics;
       default:
         return currentMetrics;
@@ -156,7 +179,10 @@ const MetricsDisplay: React.FC<{ currentPhase: Phase }> = ({ currentPhase }) => 
   };
 
   const [initialMetrics, setInitialMetrics] = useState<Metrics | null>(null);
-  const [apiData, setApiData] = useState<ApiResponse>({ rawData: null, totalLaneMiles: 62.574 });
+  const [apiData, setApiData] = useState<ApiResponse>({
+    rawData: null,
+    totalLaneMiles: 62.574,
+  });
   const [metricsData, setMetricsData] = useState<Metrics>({
     excessFuel: 10,
     congestionCost: 10,
@@ -165,14 +191,17 @@ const MetricsDisplay: React.FC<{ currentPhase: Phase }> = ({ currentPhase }) => 
   });
 
   //calculate metrics using the formulas provided
-  const calculateMetrics = (rawData: RawData | null, totalLaneMiles: number): Metrics => {
-    
-    if (!rawData) return {
-      excessFuel: 0, //gallons per year
-      congestionCost: 0, //dollars per year
-      travelTime: 0, //minutes per mile
-      delayTime: 0 //minutes per mile
-    };
+  const calculateMetrics = (
+    rawData: RawData | null,
+    totalLaneMiles: number
+  ): Metrics => {
+    if (!rawData)
+      return {
+        excessFuel: 0, //gallons per year
+        congestionCost: 0, //dollars per year
+        travelTime: 0, //minutes per mile
+        delayTime: 0, //minutes per mile
+      };
 
     //scale metrics based on ratio of current lanes to dc's total lanes (1500)
     const DC_TOTAL_LANE_MILES = 1500;
@@ -183,33 +212,46 @@ const MetricsDisplay: React.FC<{ currentPhase: Phase }> = ({ currentPhase }) => 
     const congestionCost = rawData.congestionCost * scaleFactor;
 
     //convert delay from annual hours to minutes per mile per day, scaled by lane miles, commuter population (assumed 1500)
-    const delayTime = (((rawData.totalAnnualDelay * 1000 * scaleFactor) / 365 / Math.max(totalLaneMiles, 1))/1500) * 60;
+    const delayTime =
+      ((rawData.totalAnnualDelay * 1000 * scaleFactor) /
+        365 /
+        Math.max(totalLaneMiles, 1) /
+        1500) *
+      60;
 
     //calculate travel time based on traffic volume vs lane capacity
     const NO_TRAFFIC_TIME = 1.33; //base time at 45mph (assumed), 1.33 = 60mins/45mph
     const DEMAND_PER_LANE = 36000; //daily car capacity per lane (assumed)
-    const totalDailyMiles = (rawData.freewayDailyMiles + rawData.localDailyMiles) * 1000 * scaleFactor;
-    const travelTime = NO_TRAFFIC_TIME * totalDailyMiles / (DEMAND_PER_LANE * Math.max(totalLaneMiles, 1));
+    const totalDailyMiles =
+      (rawData.freewayDailyMiles + rawData.localDailyMiles) *
+      1000 *
+      scaleFactor;
+    const travelTime =
+      (NO_TRAFFIC_TIME * totalDailyMiles) /
+      (DEMAND_PER_LANE * Math.max(totalLaneMiles, 1));
 
     //total annual fuel waste in gallons per year, scaled by total lane miles
-    const excessFuel = (rawData.excessFuel * 1000 * scaleFactor) / Math.max(totalLaneMiles, 1);
-
+    const excessFuel =
+      (rawData.excessFuel * 1000 * scaleFactor) / Math.max(totalLaneMiles, 1);
 
     // Ensure no NaN values in final results
     return {
       excessFuel: isNaN(excessFuel) ? 0 : excessFuel,
       congestionCost: isNaN(congestionCost) ? 0 : congestionCost,
       travelTime: isNaN(travelTime) ? NO_TRAFFIC_TIME : travelTime,
-      delayTime: isNaN(delayTime) ? 0 : delayTime
+      delayTime: isNaN(delayTime) ? 0 : delayTime,
     };
   };
 
   const formatMetricValue = (value: number, index: number): string => {
-    if (index === 0) { //format fuel in gallons/year with commas
+    if (index === 0) {
+      //format fuel in gallons/year with commas
       return Math.round(value).toLocaleString();
-    } else if (index === 1) { //format cost in dollars/year, no decimals
+    } else if (index === 1) {
+      //format cost in dollars/year, no decimals
       return `$${value.toFixed(0)}`;
-    } else { //format time in minutes/mile with two decimals
+    } else {
+      //format time in minutes/mile with two decimals
       return value.toFixed(2);
     }
   };
@@ -218,21 +260,24 @@ const MetricsDisplay: React.FC<{ currentPhase: Phase }> = ({ currentPhase }) => 
     //update metrics when phase or lane miles change
     if (apiData.rawData) {
       //calculate new metrics based on current state
-      const newMetrics = calculateMetrics(apiData.rawData, apiData.totalLaneMiles);
-      
+      const newMetrics = calculateMetrics(
+        apiData.rawData,
+        apiData.totalLaneMiles
+      );
+
       //only update metrics in specific phases
-      if (currentPhase === 'initialPhase') {
+      if (currentPhase === "initialPhase") {
         //reset everything in initial phase
         setInitialMetrics(null);
         setMetricsData(newMetrics);
-      } else if (currentPhase === 'paradoxExplanation') {
+      } else if (currentPhase === "paradoxExplanation") {
         //just update metrics without resetting initial state
         setMetricsData(newMetrics);
-      } else if (currentPhase === 'simulationStart' && !initialMetrics) {
+      } else if (currentPhase === "simulationStart" && !initialMetrics) {
         //save initial state when simulation starts
         setInitialMetrics(newMetrics);
         setMetricsData(newMetrics);
-      } else if (['laneAdded', 'laneRemoved'].includes(currentPhase)) {
+      } else if (["laneAdded", "laneRemoved"].includes(currentPhase)) {
         //update metrics when adding or removing lane
         const updatedMetrics = updateMetricsForPhase(newMetrics, currentPhase);
         setMetricsData(updatedMetrics);
@@ -250,7 +295,10 @@ const MetricsDisplay: React.FC<{ currentPhase: Phase }> = ({ currentPhase }) => 
           const data = await response.json();
           setApiData(data);
           if (data.rawData) {
-            const calculatedMetrics = calculateMetrics(data.rawData, data.totalLaneMiles);
+            const calculatedMetrics = calculateMetrics(
+              data.rawData,
+              data.totalLaneMiles
+            );
             setMetricsData(calculatedMetrics);
           }
         }
@@ -267,14 +315,14 @@ const MetricsDisplay: React.FC<{ currentPhase: Phase }> = ({ currentPhase }) => 
   //metrics displayed at the top
   const metrics: Metric[] = [
     {
-      label: "fuel wasted",
+      label: "fuel wasted per car",
       value: formatMetricValue(metricsData.excessFuel, 0),
       unit: "gal",
       description: "Extra fuel consumed annually due to traffic.",
       //   icon: "⛽"
     },
     {
-      label: "financial losses",
+      label: "total financial losses",
       value: formatMetricValue(metricsData.congestionCost, 1),
       unit: "million",
       description:
@@ -338,9 +386,12 @@ const MetricsDisplay: React.FC<{ currentPhase: Phase }> = ({ currentPhase }) => 
             <div className="text-sm lg:text-md text-center mb-2">
               {metric.label}
             </div>
-            <div 
-              className={`text-xl lg:text-2xl font-semibold text-center ${initialMetrics ? 
-                getMetricColor(metric, index, initialMetrics) : ''}`}
+            <div
+              className={`text-xl lg:text-2xl font-semibold text-center ${
+                initialMetrics
+                  ? getMetricColor(metric, index, initialMetrics)
+                  : ""
+              }`}
             >
               {metric.value} {metric.unit}
             </div>
