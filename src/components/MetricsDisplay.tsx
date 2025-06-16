@@ -315,7 +315,7 @@ const MetricsDisplay: React.FC<{ currentPhase: Phase }> = ({
   //metrics displayed at the top
   const metrics: Metric[] = [
     {
-      label: "fuel wasted per car",
+      label: "fuel wasted",
       value: formatMetricValue(metricsData.excessFuel, 0),
       unit: "gal",
       description: "Extra fuel consumed annually due to traffic.",
