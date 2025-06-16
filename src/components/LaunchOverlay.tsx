@@ -19,7 +19,7 @@ export default function LaunchOverlay({
     const newParticles = [...Array(20)].map(() => ({
       left: `${Math.random() * 100}%`,
       top: `${Math.random() * 100}%`,
-      delay: `${Math.random() * 5}s`
+      delay: `${Math.random() * 5}s`,
     }));
     setParticles(newParticles);
   }, []);
@@ -37,11 +37,13 @@ export default function LaunchOverlay({
         {particles.map((particle, i) => (
           <div
             key={i}
-            className={`absolute w-2 h-2 bg-[var(--color-foreground)]/10 rounded-full animate-float-${i % 3}`}
+            className={`absolute w-2 h-2 bg-[var(--color-foreground)]/10 rounded-full animate-float-${
+              i % 3
+            }`}
             style={{
               left: particle.left,
               top: particle.top,
-              animationDelay: particle.delay
+              animationDelay: particle.delay,
             }}
           ></div>
         ))}
@@ -53,17 +55,19 @@ export default function LaunchOverlay({
         <div className="absolute -inset-1 bg-[var(--color-accent)] rounded-[20px] opacity-0 group-hover:opacity-20 blur-xl transition-opacity duration-300"></div>
         <div className="relative">
           {/* Title */}
-          <h1 className="text-6xl sm:text-7xl font-medium mb-8 text-[var(--color-foreground)] tracking-tight transform hover:scale-105 transition-transform duration-300 cursor-default font-[var(--font-dm-sans)] lowercase">
+          <h1 className="text-6xl sm:text-7xl font-medium mb-8 text-[var(--color-foreground)] tracking-tight transform transition-transform duration-300 cursor-default font-[var(--font-dm-sans)] lowercase">
             transport
-            <span className="text-[var(--color-accent)] font-medium">sense</span>
+            <span className="text-[var(--color-accent)] font-medium">
+              sense
+            </span>
           </h1>
 
           {/* Glowing accent line */}
           <div className="w-32 h-1 bg-[var(--color-accent)] rounded-full mb-8 animate-pulse opacity-80"></div>
 
           <p className="text-lg sm:text-xl text-[var(--color-foreground)]/90 mb-8 leading-relaxed tracking-normal font-[var(--font-dm-sans)] font-light">
-            discover why traffic works the way it does — and how better design can
-            change everything.
+            discover why traffic works the way it does — and how better design
+            can change everything.
             <span className="block mt-4 text-[var(--color-foreground)]/80 tracking-normal">
               in this interactive experience, you can make policy decisions and
               watch them play out in real time.
