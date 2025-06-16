@@ -149,10 +149,10 @@ const MetricsDisplay: React.FC<{ currentPhase: Phase }> = ({
       case "laneAdded":
         // User added a lane, seeing temporary improvement
         return {
-          excessFuel: currentMetrics.excessFuel * 1.8,
-          congestionCost: currentMetrics.congestionCost * 1.9,
-          travelTime: currentMetrics.travelTime * 1.7,
-          delayTime: currentMetrics.delayTime * 1.8,
+          excessFuel: currentMetrics.excessFuel * 1.15,
+          congestionCost: currentMetrics.congestionCost * 1.2,
+          travelTime: currentMetrics.travelTime * 1.12,
+          delayTime: currentMetrics.delayTime * 1.18,
         };
       case "trafficReturns":
         // Traffic has returned worse due to induced demand
@@ -163,10 +163,10 @@ const MetricsDisplay: React.FC<{ currentPhase: Phase }> = ({
       case "laneRemoved":
         // Traffic improved after lane removal
         return {
-          excessFuel: currentMetrics.excessFuel * 0.6,
-          congestionCost: currentMetrics.congestionCost * 0.5,
-          travelTime: currentMetrics.travelTime * 0.7,
-          delayTime: currentMetrics.delayTime * 0.6,
+          excessFuel: currentMetrics.excessFuel * 0.85,
+          congestionCost: currentMetrics.congestionCost * 0.85,
+          travelTime: currentMetrics.travelTime * 0.9,
+          delayTime: currentMetrics.delayTime * 0.88,
         };
       case "trafficGone":
         // Keep improved metrics
