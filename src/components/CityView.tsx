@@ -94,16 +94,13 @@ const CityView: React.FC<CityViewProps> = ({ city, children }) => {
       //take 70 percent
       .slice(0, Math.floor(nonHighwayRoads.length * 0.7));
 
-    //animate highway
+    //start highway animation
     let highwayAnimation: Promise<void> | undefined;
     if (targetHighway) {
       highwayAnimation = (async () => {
         //random delay 0-100ms
         await sleep(Math.random() * 100);
         targetHighway.style.stroke = "#FFD700";
-
-        //wait for white roads
-        await waitForWhiteRoads();
 
         //go orange then red
         await sleep(100);
@@ -114,28 +111,19 @@ const CityView: React.FC<CityViewProps> = ({ city, children }) => {
       })();
     }
 
-    //yellow wave
+    //make local roads yellow
     for (const road of randomRoads) {
       road.style.stroke = "#FFD700";
       await sleep(10 + Math.random() * 15);
     }
 
-    //hold yellow
+    //pause for effect
     await sleep(400);
 
-    //fade to white
-    const fadeBackPromises = randomRoads.map((road) =>
-      (async () => {
-        await sleep(100 + Math.random() * 400);
-        road.style.stroke = "var(--white)";
-      })()
-    );
-
-    // Wait for all animations to complete
-    await Promise.all([
-      ...fadeBackPromises,
-      ...(highwayAnimation ? [highwayAnimation] : []),
-    ]);
+    //wait for highway if needed
+    if (highwayAnimation) {
+      await highwayAnimation;
+    }
   };
 
   const resetSimulation = () => {
