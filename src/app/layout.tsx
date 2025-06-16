@@ -41,7 +41,7 @@ const robotoCondensed = Roboto_Condensed({
 });
 
 export const metadata: Metadata = {
-  title: "TransportSense",
+  title: "transportsense",
   keywords: ["transportation", "urban planning", "cities", "sustainability"],
   description: "using data to advocate for better transport policies",
 };

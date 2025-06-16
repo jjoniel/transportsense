@@ -14,10 +14,19 @@ interface CityViewProps {
 const ORIGINAL_ROAD_COLOR = "var(--white)";
 const ORIGINAL_STROKE_WIDTH = "4";
 
-type Phase = 'initialPhase' | 'simulationStart' | 'laneAdded' | 'trafficReturns' | 'paradoxExplanation' | 'simulationReset' | 'laneRemoved' | 'trafficGone' | 'solutionExplanation';
+type Phase =
+  | "initialPhase"
+  | "simulationStart"
+  | "laneAdded"
+  | "trafficReturns"
+  | "paradoxExplanation"
+  | "simulationReset"
+  | "laneRemoved"
+  | "trafficGone"
+  | "solutionExplanation";
 
 const CityView: React.FC<CityViewProps> = ({ city, children }) => {
-  const [currentPhase, setCurrentPhase] = useState<Phase>('initialPhase');
+  const [currentPhase, setCurrentPhase] = useState<Phase>("initialPhase");
   const [, setSvgArea] = useState<number | null>(null);
   const [estimatedPopulation, setEstimatedPopulation] = useState<number | null>(
     null
@@ -43,15 +52,22 @@ const CityView: React.FC<CityViewProps> = ({ city, children }) => {
 
   //get highways
   const getHighwayRoads = () =>
-    Array.from(document.querySelectorAll<SVGPathElement>('path[stroke="#666"][stroke-width="8"]'));
+    Array.from(
+      document.querySelectorAll<SVGPathElement>(
+        'path[stroke="#666"][stroke-width="8"]'
+      )
+    );
 
   //sleep helper
-  const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+  const sleep = (ms: number) =>
+    new Promise((resolve) => setTimeout(resolve, ms));
 
   //check if roads are white
   const checkAllRoadsWhite = () => {
     const nonHighwayRoads = Array.from(getAllNonHighwayRoads());
-    return nonHighwayRoads.every(road => road.style.stroke === "var(--white)");
+    return nonHighwayRoads.every(
+      (road) => road.style.stroke === "var(--white)"
+    );
   };
 
   //wait for white roads
@@ -65,12 +81,12 @@ const CityView: React.FC<CityViewProps> = ({ city, children }) => {
   const animateTrafficBuild = async () => {
     const nonHighwayRoads = Array.from(getAllNonHighwayRoads());
     const highwayRoads = getHighwayRoads();
-    
+
     //pick random highway
     const targetHighway = highwayRoads
       //shuffle and take first
       .sort(() => 0.5 - Math.random())[0];
-    
+
     //get roads for yellow wave
     const randomRoads = nonHighwayRoads
       //shuffle roads
@@ -85,10 +101,10 @@ const CityView: React.FC<CityViewProps> = ({ city, children }) => {
         //random delay 0-100ms
         await sleep(Math.random() * 100);
         targetHighway.style.stroke = "#FFD700";
-        
+
         //wait for white roads
         await waitForWhiteRoads();
-        
+
         //go orange then red
         await sleep(100);
         targetHighway.style.stroke = "#FFA500";
@@ -108,7 +124,7 @@ const CityView: React.FC<CityViewProps> = ({ city, children }) => {
     await sleep(400);
 
     //fade to white
-    const fadeBackPromises = randomRoads.map(road => 
+    const fadeBackPromises = randomRoads.map((road) =>
       (async () => {
         await sleep(100 + Math.random() * 400);
         road.style.stroke = "var(--white)";
@@ -116,7 +132,10 @@ const CityView: React.FC<CityViewProps> = ({ city, children }) => {
     );
 
     // Wait for all animations to complete
-    await Promise.all([...fadeBackPromises, ...(highwayAnimation ? [highwayAnimation] : [])]);
+    await Promise.all([
+      ...fadeBackPromises,
+      ...(highwayAnimation ? [highwayAnimation] : []),
+    ]);
   };
 
   const resetSimulation = () => {
@@ -158,7 +177,10 @@ const CityView: React.FC<CityViewProps> = ({ city, children }) => {
         redRoad.style.strokeWidth || ORIGINAL_STROKE_WIDTH
       );
       // Don't go below the original width
-      const newWidth = Math.max(parseInt(ORIGINAL_STROKE_WIDTH), currentWidth - 4);
+      const newWidth = Math.max(
+        parseInt(ORIGINAL_STROKE_WIDTH),
+        currentWidth - 4
+      );
       redRoad.style.strokeWidth = `${newWidth}px`;
     }
     yellowRoads.forEach((road) => (road.style.stroke = ORIGINAL_ROAD_COLOR));
@@ -225,7 +247,9 @@ const CityView: React.FC<CityViewProps> = ({ city, children }) => {
             redRoad.style.stroke = "green"; //improved
           }
           //clear other yellow roads
-          yellowRoads.forEach(road => road.style.stroke = ORIGINAL_ROAD_COLOR);
+          yellowRoads.forEach(
+            (road) => (road.style.stroke = ORIGINAL_ROAD_COLOR)
+          );
           setYellowRoads([]);
         });
         break;
@@ -284,7 +308,7 @@ const CityView: React.FC<CityViewProps> = ({ city, children }) => {
             data-tooltip-class="custom-tooltip"
             data-highlight-class="custom-highlight"
           >
-            <ChatInterface 
+            <ChatInterface
               onChoiceSelect={handleChoiceSelect}
               onPhaseChange={(phase) => setCurrentPhase(phase)}
             />
@@ -307,7 +331,7 @@ const CityView: React.FC<CityViewProps> = ({ city, children }) => {
       {/* Content for small screens */}
       <div className="sm:hidden flex text-white p-4 flex-col space-y-2">
         <div className="h-96 mt-4">
-          <ChatInterface 
+          <ChatInterface
             onChoiceSelect={handleChoiceSelect}
             onPhaseChange={(phase) => setCurrentPhase(phase)}
           />
