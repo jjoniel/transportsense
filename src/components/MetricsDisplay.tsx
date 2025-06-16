@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import confetti from 'canvas-confetti';
 
 type Metric = {
   label: string;
@@ -34,6 +35,46 @@ type Metrics = {
 type Phase = 'initialPhase' | 'simulationStart' | 'laneAdded' | 'trafficReturns' | 'paradoxExplanation' | 'removeRoad' | 'solutionExplanation';
 
 const MetricsDisplay: React.FC<{ currentPhase: Phase }> = ({ currentPhase }) => {
+  //celebrate when metrics improve
+  const celebrateImprovement = () => {
+    //first burst from bottom
+    confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: { y: 0.6 },
+      colors: ['#22c55e', '#4ade80', '#86efac'] //green shades
+    });
+
+    //side bursts after delay
+    setTimeout(() => {
+      //left side
+      confetti({
+        particleCount: 50,
+        angle: 60,
+        spread: 55,
+        origin: { x: 0, y: 0.5 }
+      });
+      //right side
+      confetti({
+        particleCount: 50,
+        angle: 120,
+        spread: 55,
+        origin: { x: 1, y: 0.5 }
+      });
+    }, 300);
+
+    //final burst from top
+    setTimeout(() => {
+      confetti({
+        particleCount: 150,
+        spread: 100,
+        origin: { y: 0 },
+        gravity: 0.8,
+        colors: ['#22c55e', '#4ade80', '#86efac', '#ffffff']
+      });
+    }, 600);
+  };
+
   const getMetricColor = (metric: Metric, index: number, initialMetrics: Metrics | null) => {
     //don't color metrics in initial phase
     if (currentPhase === 'initialPhase') return '';
@@ -46,12 +87,17 @@ const MetricsDisplay: React.FC<{ currentPhase: Phase }> = ({ currentPhase }) => 
                       index === 2 ? 'travelTime' : 'delayTime';
     const initialValue = initialMetrics?.[metricKey] ?? 0;
 
-    //return red if metric increased from initial value
-    if (currentValue > initialValue) return 'text-red-500';
-    //return green if metric decreased from initial value
-    if (currentValue < initialValue) return 'text-green-500';
-    //return empty string (no color change) if values are equal
-    return '';
+    //check if metric improved
+    const improved = currentValue < initialValue;
+
+    //celebrate any improvement after simulation starts
+    if (improved && initialMetrics && ['laneAdded', 'removeRoad', 'trafficReturns'].includes(currentPhase)) {
+      celebrateImprovement();
+    }
+
+    //return color based on improvement
+    return improved ? 'text-green-500' : 
+           currentValue > initialValue ? 'text-red-500' : '';
   };
 
   const [tappedIndex, setTappedIndex] = useState<number | null>(null);
