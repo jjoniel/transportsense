@@ -68,18 +68,21 @@ const CityView: React.FC<CityViewProps> = ({ city, children }) => {
     
     //pick random highway
     const targetHighway = highwayRoads
+      //shuffle and take first
       .sort(() => 0.5 - Math.random())[0];
     
     //get roads for yellow wave
     const randomRoads = nonHighwayRoads
+      //shuffle roads
       .sort(() => 0.5 - Math.random())
+      //take 70 percent
       .slice(0, Math.floor(nonHighwayRoads.length * 0.7));
 
     //animate highway
     let highwayAnimation: Promise<void> | undefined;
     if (targetHighway) {
       highwayAnimation = (async () => {
-        //start yellow
+        //random delay 0-200ms
         await sleep(Math.random() * 200);
         targetHighway.style.stroke = "#FFD700";
         
@@ -141,7 +144,7 @@ const CityView: React.FC<CityViewProps> = ({ city, children }) => {
       const currentWidth = parseInt(
         redRoad.style.strokeWidth || ORIGINAL_STROKE_WIDTH
       );
-      redRoad.style.strokeWidth = `${currentWidth + 4}px`;
+      redRoad.style.strokeWidth = `${currentWidth + 8}px`; //make it thicker
     }
     yellowRoads.forEach((road) => (road.style.stroke = ORIGINAL_ROAD_COLOR));
     setYellowRoads([]);
@@ -189,7 +192,18 @@ const CityView: React.FC<CityViewProps> = ({ city, children }) => {
         removeLane();
         break;
       case "trafficReturns":
-        showInducedDemand();
+        //green road gets congested again
+        Promise.resolve().then(async () => {
+          if (redRoad) {
+            await sleep(500);
+            redRoad.style.stroke = "#FFD700"; //yellow
+            await sleep(800);
+            redRoad.style.stroke = "#FFA500"; //orange
+            await sleep(800);
+            redRoad.style.stroke = "#FF0000"; //red
+          }
+          showInducedDemand();
+        });
         break;
       case "root":
         resetSimulation();
