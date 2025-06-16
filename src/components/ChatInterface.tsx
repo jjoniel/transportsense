@@ -9,7 +9,7 @@ type Message = {
   text: string;
 };
 
-type Phase = 'initialPhase' | 'simulationStart' | 'laneAdded' | 'trafficReturns' | 'paradoxExplanation' | 'removeRoad' | 'solutionExplanation';
+type Phase = 'initialPhase' | 'simulationStart' | 'laneAdded' | 'trafficReturns' | 'paradoxExplanation' | 'simulationReset' | 'laneRemoved' | 'trafficGone' | 'solutionExplanation';
 
 interface ChatInterfaceProps {
   onChoiceSelect?: (choice: Choice) => void;
@@ -48,8 +48,8 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ onChoiceSelect, onPhaseCh
         text: initialNode.botText,
       }]);
       setCurrentNodeId('initialPhase');
-      setNextId(2);
       onPhaseChange?.('initialPhase');
+      setNextId(2);
       return;
     }
 

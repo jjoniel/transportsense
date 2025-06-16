@@ -14,7 +14,7 @@ interface CityViewProps {
 const ORIGINAL_ROAD_COLOR = "var(--white)";
 const ORIGINAL_STROKE_WIDTH = "4";
 
-type Phase = 'initialPhase' | 'simulationStart' | 'laneAdded' | 'trafficReturns' | 'paradoxExplanation' | 'removeRoad' | 'solutionExplanation';
+type Phase = 'initialPhase' | 'simulationStart' | 'laneAdded' | 'trafficReturns' | 'paradoxExplanation' | 'simulationReset' | 'laneRemoved' | 'trafficGone' | 'solutionExplanation';
 
 const CityView: React.FC<CityViewProps> = ({ city, children }) => {
   const [currentPhase, setCurrentPhase] = useState<Phase>('initialPhase');
@@ -180,17 +180,15 @@ const CityView: React.FC<CityViewProps> = ({ city, children }) => {
   const handleChoiceSelect = (choice: Choice) => {
     switch (choice.nextNode) {
       case "simulationStart":
-        // Use Promise to handle the async animation
         Promise.resolve().then(async () => {
           await showInitialCongestion();
         });
         break;
+
       case "laneAdded":
         addLane();
         break;
-      case "removeRoad":
-        removeLane();
-        break;
+
       case "trafficReturns":
         //green road gets congested again
         Promise.resolve().then(async () => {
@@ -205,7 +203,34 @@ const CityView: React.FC<CityViewProps> = ({ city, children }) => {
           showInducedDemand();
         });
         break;
-      case "root":
+
+      case "simulationReset":
+        resetSimulation();
+        Promise.resolve().then(async () => {
+          await showInitialCongestion();
+        });
+        break;
+
+      case "laneRemoved":
+        removeLane();
+        break;
+
+      case "trafficGone":
+        //show traffic improvement
+        Promise.resolve().then(async () => {
+          if (redRoad) {
+            await sleep(500);
+            redRoad.style.stroke = "#FFD700"; //yellow
+            await sleep(800);
+            redRoad.style.stroke = "green"; //improved
+          }
+          //clear other yellow roads
+          yellowRoads.forEach(road => road.style.stroke = ORIGINAL_ROAD_COLOR);
+          setYellowRoads([]);
+        });
+        break;
+
+      case "initialPhase":
         resetSimulation();
         break;
     }

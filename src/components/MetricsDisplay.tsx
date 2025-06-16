@@ -32,7 +32,7 @@ type Metrics = {
   delayTime: number;
 };
 
-type Phase = 'initialPhase' | 'simulationStart' | 'laneAdded' | 'trafficReturns' | 'paradoxExplanation' | 'removeRoad' | 'solutionExplanation';
+type Phase = 'initialPhase' | 'simulationStart' | 'laneAdded' | 'trafficReturns' | 'paradoxExplanation' | 'simulationReset' | 'laneRemoved' | 'trafficGone' | 'solutionExplanation';
 
 const MetricsDisplay: React.FC<{ currentPhase: Phase }> = ({ currentPhase }) => {
   //celebrate when metrics improve
@@ -76,9 +76,6 @@ const MetricsDisplay: React.FC<{ currentPhase: Phase }> = ({ currentPhase }) => 
   };
 
   const getMetricColor = (metric: Metric, index: number, initialMetrics: Metrics | null) => {
-    //don't color metrics in initial phase
-    if (currentPhase === 'initialPhase') return '';
-
     //extract just the number from the metric value (removes currency symbol, comma)
     const currentValue = Number(metric.value.replace(/[^0-9.-]/g, ''));
     //get the corresponding initial value based on metric type
@@ -90,14 +87,19 @@ const MetricsDisplay: React.FC<{ currentPhase: Phase }> = ({ currentPhase }) => 
     //check if metric improved
     const improved = currentValue < initialValue;
 
-    //celebrate any improvement after simulation starts
-    if (improved && initialMetrics && ['laneAdded', 'removeRoad', 'trafficReturns'].includes(currentPhase)) {
-      celebrateImprovement();
+    //only show colors in specific phases
+    if (currentPhase === 'laneRemoved') {
+      //show green for improvements and celebrate
+      if (improved && initialMetrics) {
+        celebrateImprovement();
+      }
+      return improved ? 'text-green-500' : '';
+    } else if (currentPhase === 'laneAdded') {
+      //show red for worsening metrics
+      return currentValue > initialValue ? 'text-red-500' : '';
+    } else {
+      return '';
     }
-
-    //return color based on improvement
-    return improved ? 'text-green-500' : 
-           currentValue > initialValue ? 'text-red-500' : '';
   };
 
   const [tappedIndex, setTappedIndex] = useState<number | null>(null);
@@ -120,46 +122,34 @@ const MetricsDisplay: React.FC<{ currentPhase: Phase }> = ({ currentPhase }) => 
         return currentMetrics;
       case 'simulationStart':
         // User has seen initial traffic build up
-        return {
-          excessFuel: currentMetrics.excessFuel * 1.3,
-          congestionCost: currentMetrics.congestionCost * 1.4,
-          travelTime: currentMetrics.travelTime * 1.2,
-          delayTime: currentMetrics.delayTime * 1.5,
-        };
+        return currentMetrics;
       case 'laneAdded':
         // User added a lane, seeing temporary improvement
         return {
-          excessFuel: currentMetrics.excessFuel * 0.8,
-          congestionCost: currentMetrics.congestionCost * 0.9,
-          travelTime: currentMetrics.travelTime * 0.9,
-          delayTime: currentMetrics.delayTime * 0.7,
+          excessFuel: currentMetrics.excessFuel * 1.8,
+          congestionCost: currentMetrics.congestionCost * 1.9,
+          travelTime: currentMetrics.travelTime * 1.7,
+          delayTime: currentMetrics.delayTime * 1.8,
         };
       case 'trafficReturns':
         // Traffic has returned worse due to induced demand
-        return {
-          excessFuel: currentMetrics.excessFuel * 1.4,
-          congestionCost: currentMetrics.congestionCost * 1.5,
-          travelTime: currentMetrics.travelTime * 1.3,
-          delayTime: currentMetrics.delayTime * 1.6,
-        };
+        return currentMetrics;
       case 'paradoxExplanation':
         // Learning about induced demand - metrics stay the same
         return currentMetrics;
-      case 'removeRoad':
-        // Lane removed, improving traffic flow
+      case 'laneRemoved':
+        // Traffic improved after lane removal
         return {
-          excessFuel: currentMetrics.excessFuel * 0.7,
-          congestionCost: currentMetrics.congestionCost * 0.8,
-          travelTime: currentMetrics.travelTime * 0.9,
-          delayTime: currentMetrics.delayTime * 0.7,
-        };
-      case 'solutionExplanation':
-        return {
-          excessFuel: currentMetrics.excessFuel * 0.6, // Better solutions help
-          congestionCost: currentMetrics.congestionCost * 0.7,
-          travelTime: currentMetrics.travelTime * 0.8,
+          excessFuel: currentMetrics.excessFuel * 0.6,
+          congestionCost: currentMetrics.congestionCost * 0.5,
+          travelTime: currentMetrics.travelTime * 0.7,
           delayTime: currentMetrics.delayTime * 0.6,
         };
+      case 'trafficGone':
+        // Keep improved metrics
+        return currentMetrics;
+      case 'solutionExplanation':
+        return currentMetrics;
       default:
         return currentMetrics;
     }
@@ -230,18 +220,22 @@ const MetricsDisplay: React.FC<{ currentPhase: Phase }> = ({ currentPhase }) => 
       //calculate new metrics based on current state
       const newMetrics = calculateMetrics(apiData.rawData, apiData.totalLaneMiles);
       
-      //reset metrics and initial state when returning to initial phase
-      if (currentPhase === 'removeRoad') {
+      //only update metrics in specific phases
+      if (currentPhase === 'initialPhase') {
+        //reset everything in initial phase
         setInitialMetrics(null);
         setMetricsData(newMetrics);
-      } else {
+      } else if (currentPhase === 'paradoxExplanation') {
+        //just update metrics without resetting initial state
+        setMetricsData(newMetrics);
+      } else if (currentPhase === 'simulationStart' && !initialMetrics) {
+        //save initial state when simulation starts
+        setInitialMetrics(newMetrics);
+        setMetricsData(newMetrics);
+      } else if (['laneAdded', 'laneRemoved'].includes(currentPhase)) {
+        //update metrics when adding or removing lane
         const updatedMetrics = updateMetricsForPhase(newMetrics, currentPhase);
         setMetricsData(updatedMetrics);
-        
-        //save initial state when simulation starts
-        if (currentPhase === 'simulationStart' && !initialMetrics) {
-          setInitialMetrics(newMetrics);
-        }
       }
     }
   }, [currentPhase, apiData.totalLaneMiles, apiData.rawData, initialMetrics]);
