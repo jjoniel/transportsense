@@ -13,7 +13,7 @@
   --accent-light: #0a84ff;
   --accent-dark: #0040dd;
   --overlay: rgba(0, 0, 0, 0.7);
-  --glass: rgba(255, 255, 255, 0.4);
+  --glass: rgba(50, 50, 50, 0.4);
 }
 
 /* Theme Tokens */
@@ -74,6 +74,7 @@ button:active {
   color: var(--gray-900) !important;
   border-radius: 14px !important;
   text-align: center;
+  width: 2vw !important;
   font-family: -apple-system, BlinkMacSystemFont, var(--font-sans) !important;
   padding: 12px 16px !important;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1) !important;
@@ -97,12 +98,12 @@ button:active {
   font-size: 15px !important;
   line-height: 1.4 !important;
   padding: 16px !important;
-  color: var(--gray-900) !important;
-  background-color: var(--glass) !important;
-  border-radius: 14px !important;
+  color: var(--white) !important;
+  background-color: transparent !important;
+  /* border-radius: 14px !important;
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1) !important;
   backdrop-filter: blur(20px) !important;
-  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important; */
 }
 
 .introjs-tooltipbuttons {
