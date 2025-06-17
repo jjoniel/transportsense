@@ -2,13 +2,22 @@
 
 /* Root CSS Variables */
 :root {
-  --black: #111111;
-  --white: #e8e9f3;
-  --accent: #eb1043;
+  --black: #000000;
+  --white: #ffffff;
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-800: #1f2937;
+  --gray-900: #111827;
+  --accent: #007aff;
+  --accent-light: #0a84ff;
+  --accent-dark: #0040dd;
+  --overlay: rgba(0, 0, 0, 0.7);
+  --glass: rgba(50, 50, 50, 0.4);
 }
 
-/* Tailwind-aware Theme Tokens */
-@theme inline {
+/* Theme Tokens */
+:root {
   --color-background: var(--black);
   --color-foreground: var(--white);
   --color-accent: var(--accent);
@@ -22,8 +31,9 @@
 body {
   background: var(--color-background);
   color: var(--color-foreground);
-  font-family: var(--font-roboto-condensed);
+  font-family: -apple-system, BlinkMacSystemFont, var(--font-sans);
   overscroll-behavior: none;
+  -webkit-font-smoothing: antialiased;
 }
 
 button {
@@ -60,16 +70,23 @@ button:active {
 }
 
 .custom-tooltip {
-  background-color: var(--black) !important;
-  color: var(--white) !important;
-  border-radius: 3rem !important;
+  background-color: var(--glass) !important;
+  color: var(--gray-900) !important;
+  border-radius: 14px !important;
   text-align: center;
-  font-family: var(--font-roboto-condensed) !important;
-  padding: none !important;
+  width: 2vw !important;
+  font-family: -apple-system, BlinkMacSystemFont, var(--font-sans) !important;
+  padding: 12px 16px !important;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1) !important;
+  backdrop-filter: blur(20px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
 }
 
 .introjs-helperLayer {
-  border-radius: 1.5rem !important;
+  border-radius: 12px !important;
+  box-shadow: 0 0 0 2px var(--accent) !important;
+  background-color: rgba(255, 255, 255, 0.05) !important;
+  backdrop-filter: blur(8px) !important;
 }
 
 .introjs-tooltip-header {
@@ -77,10 +94,16 @@ button:active {
 }
 
 .introjs-tooltiptext {
-  font-family: var(--font-roboto-condensed) !important;
-  font-size: 1rem !important;
-  padding-top: 2rem !important;
-  padding-bottom: 0 !important;
+  font-family: -apple-system, BlinkMacSystemFont, var(--font-sans) !important;
+  font-size: 15px !important;
+  line-height: 1.4 !important;
+  padding: 16px !important;
+  color: var(--white) !important;
+  background-color: transparent !important;
+  /* border-radius: 14px !important;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1) !important;
+  backdrop-filter: blur(20px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important; */
 }
 
 .introjs-tooltipbuttons {
@@ -92,20 +115,27 @@ button:active {
 .introjs-button:focus {
   box-shadow: none !important;
   cursor: pointer !important;
-  transition: background-color 0.2s, transform 0.2s !important;
-  border-radius: 2rem !important;
+  transition: all 0.2s ease !important;
+  border-radius: 20px !important;
   color: var(--white) !important;
-  background-color: transparent !important;
-  border: 1px solid var(--accent) !important;
+  background-color: var(--accent) !important;
+  border: none !important;
   text-shadow: none !important;
+  padding: 8px 16px !important;
+  margin: 4px !important;
+  font-size: 15px !important;
+  font-weight: 500 !important;
+  letter-spacing: -0.01em !important;
 }
 
-.introjs-button:hover,
+.introjs-button:hover {
+  background-color: var(--accent-light) !important;
+  transform: translateY(-1px) !important;
+}
+
 .introjs-button:active {
-  background-color: var(--accent) !important;
-  color: var(--white) !important;
-  border-radius: 2rem !important;
-  border: 1px solid var(--accent) !important;
+  background-color: var(--accent-dark) !important;
+  transform: translateY(0) !important;
 }
 
 .introjs-prevbutton {
