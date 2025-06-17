@@ -34,5 +34,5 @@ Through its powerful simulation and data-driven insights, TransportSense is more
 ### 🔗 Submission Links
 
 - **Live App**: [Check out TransportSense](https://transportsense.xyz)
-- **Devpost**: [put our devpost submission link here](https://ai-in-action.devpost.com)
-- **Demo Video**: [put our demo vid link here](https://ai-in-action.devpost.com)
+- **Devpost**: [Our submission to the AI in Action Hackathon](https://devpost.com/software/transportsense)
+- **Demo Video**: [See our demo video](https://www.youtube.com/watch?v=sk7Vp4eyMA4)
