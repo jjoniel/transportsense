@@ -2,9 +2,9 @@
 
 **TransportSense** is an interactive AI-powered traffic simulator that helps users understand urban congestion and **Braess’ Paradox** by letting them add or remove roads and watch how traffic metrics (like travel time, fuel waste, and congestion cost) change in real time. 
 
-Unlike traditional traffic simulators, TransportSense makes complex traffic issues like Braess' Paradox understandable to the public through real-time AI explanations.
+Unlike traditional traffic simulators, TransportSense makes _complex traffic issues_ like Braess' Paradox _understandable to the public_ through real-time AI explanations.
 
-TransportSense empowers anyone to understand and predict the hidden consequences of urban planning decisions—**making smarter, more sustainable cities possible.**
+TransportSense empowers anyone to understand and predict the _hidden consequences_ of urban planning decisions—**making smarter, more sustainable cities possible.**
 
 ### 🛠️ Tech + Tools Used
 
@@ -15,7 +15,7 @@ TransportSense empowers anyone to understand and predict the hidden consequences
 **MongoDB Atlas:**
 - Stores real-world transportation data sourced from the following public dataset and report:
   - [Transportation For America: The Congestion Con (we store Table I from the report)](https://t4america.org/wp-content/uploads/2020/03/Congestion-Report-2020-FINAL.pdf)
-  - [Texas A&M Transportation Institute: Base Statistics from the 2023 Urban Mobility Report](https://tti.tamu.edu/documents/umr/congestion-data/complete-data-2023-umr-by-tti.xlsx)
+  - [Texas A&M Transportation Institute: Base Statistics from the 2023 Urban Mobility Report]([https://tti.tamu.edu/documents/umr/congestion-data/complete-data-2023-umr-by-tti.xlsx](https://mobility.tamu.edu/umr/report/))
 - We use the data for Washington, D.C. from both data sources to calculate and persist updated traffic metrics based on the user actions (adding/removing roads) and our dynamic traffic simulation. These are the main metrics we track:
   - Average delay per mile
   - Average travel time per mile
@@ -25,6 +25,5 @@ TransportSense empowers anyone to understand and predict the hidden consequences
 
 ### 🔗 Submission Links
 - **Devpost**: [put our devpost submission link here](https://ai-in-action.devpost.com)  
-- **Demo Video**: [put our demo vid link here](https://ai-in-action.devpost.com)  
+- **Demo Video**: [put our demo vid link here](https://ai-in-action.devpost.com)
 
----
