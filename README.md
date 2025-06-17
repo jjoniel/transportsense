@@ -1,36 +1,30 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## 🚦 TransportSense – AI in Action Hackathon
 
-## Getting Started
+**TransportSense** is an interactive AI-powered traffic simulator that helps users understand urban congestion and **Braess’ Paradox** by letting them add or remove roads and watch how traffic metrics (like travel time, fuel waste, and congestion cost) change in real time. 
 
-First, run the development server:
+Unlike traditional traffic simulators, TransportSense makes complex traffic issues like Braess' Paradox understandable to the public through real-time AI explanations.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+TransportSense empowers anyone to understand and predict the hidden consequences of urban planning decisions—**making smarter, more sustainable cities possible.**
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 🛠️ Tech + Tools Used
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+**Google Cloud:**
+- **Vertex AI + Gemini 2.0 Flash** – Guides the user step-by-step to help them fix a highly congested portion of Washington, D.C, generating natural-language explanations of traffic changes, and teaching users about real-world traffic dynamics like **Braess' Paradox** and **induced demand**.
+- **Cloud Run** – hosts our **NextJS app** as a scalable containerized web app
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+**MongoDB Atlas:**
+- Stores real-world transportation data sourced from the following public dataset and report:
+  - [Transportation For America: The Congestion Con (we store Table I from the report)](https://t4america.org/wp-content/uploads/2020/03/Congestion-Report-2020-FINAL.pdf)
+  - [Texas A&M Transportation Institute: Base Statistics from the 2023 Urban Mobility Report](https://tti.tamu.edu/documents/umr/congestion-data/complete-data-2023-umr-by-tti.xlsx)
+- We use the data for Washington, D.C. from both data sources to calculate and persist updated traffic metrics based on the user actions (adding/removing roads) and our dynamic traffic simulation. These are the main metrics we track:
+  - Average delay per mile
+  - Average travel time per mile
+  - Annual excess fuel wasted
+  - Annual congestion cost
+ - We created embeddings and used **MongoDB Atlas' Vector Search** to help us find and compare similar traffic patterns.
 
-## Learn More
+### 🔗 Submission Links
+- **Devpost**: [put our devpost submission link here](https://ai-in-action.devpost.com)  
+- **Demo Video**: [put our demo vid link here](https://ai-in-action.devpost.com)  
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
