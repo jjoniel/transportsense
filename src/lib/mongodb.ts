@@ -1,17 +1,18 @@
 import { MongoClient } from "mongodb";
 
+/* eslint-disable no-var */
 declare global {
-  // eslint-disable-next-line no-var
   var _mongoClient: MongoClient | null;
   var _mongoClientPromise: Promise<MongoClient> | null;
 }
+/* eslint-enable no-var */
 
 async function dbConnect() {
   const MONGODB_URI = process.env.MONGODB_URI!;
 
   if (!MONGODB_URI) {
     throw new Error(
-      "Please define the MONGODB_URI environment variable inside .env.local"
+        "Please define the MONGODB_URI environment variable inside .env.local"
     );
   }
 
