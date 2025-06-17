@@ -130,10 +130,12 @@ const CityView: React.FC<CityViewProps> = ({ city, children }) => {
     const nonHighwayRoads = getAllNonHighwayRoads();
     nonHighwayRoads.forEach((road) => {
       road.style.stroke = "var(--white)";
+      road.style.strokeWidth = ORIGINAL_STROKE_WIDTH;
     });
     const highwayRoads = getHighwayRoads();
     highwayRoads.forEach((road) => {
       road.style.stroke = "#666";
+      road.style.strokeWidth = "8px";
     });
     setRedRoad(null);
     setYellowRoads([]);
