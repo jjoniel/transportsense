@@ -4,7 +4,7 @@
 
 ## 🚦 TransportSense – AI in Action Hackathon
 
-**TransportSense** is an interactive AI-powered, data-driven traffic simulation designed to educate users—particularly those unfamiliar with the complex realities of urban traffic—about the unintended consequences of road expansions and infrastructure decisions. By enabling users to add or remove roads and observe real-time changes in travel time, fuel consumption, and congestion costs, the simulator sheds light on counterintuitive phenomena like **Braess’ Paradox**.
+[**TransportSense**](https://transportsense.xyz) is an interactive AI-powered, data-driven traffic simulation designed to educate users—particularly those unfamiliar with the complex realities of urban traffic—about the unintended consequences of road expansions and infrastructure decisions. By enabling users to add or remove roads and observe real-time changes in travel time, fuel consumption, and congestion costs, the simulator sheds light on counterintuitive phenomena like **Braess’ Paradox**.
 
 Unlike traditional traffic simulators, TransportSense makes _complex traffic issues_ like Braess' Paradox _understandable to the public_ through real-time, data-powered visualizations and AI explanations. This is especially critical for policymakers, urban planners, and everyday citizens who may intuitively support road expansions without realizing that such decisions often worsen traffic and increase environmental harm. By guiding users through simulated scenarios, **TransportSense** aims to foster more informed public discourse and promote smarter investment in sustainable transit solutions.
 
@@ -33,5 +33,6 @@ Through its powerful simulation and data-driven insights, TransportSense is more
 
 ### 🔗 Submission Links
 
+- **Live App**: [Check out TransportSense](https://transportsense.xyz)
 - **Devpost**: [put our devpost submission link here](https://ai-in-action.devpost.com)
 - **Demo Video**: [put our demo vid link here](https://ai-in-action.devpost.com)
