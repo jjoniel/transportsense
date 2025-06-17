@@ -15,7 +15,7 @@ TransportSense empowers anyone to understand and predict the _hidden consequence
 **MongoDB Atlas:**
 - Stores real-world transportation data sourced from the following public dataset and report:
   - [Transportation For America: The Congestion Con (we store Table I from the report)](https://t4america.org/wp-content/uploads/2020/03/Congestion-Report-2020-FINAL.pdf)
-  - [Texas A&M Transportation Institute: Base Statistics from the 2023 Urban Mobility Report]([https://tti.tamu.edu/documents/umr/congestion-data/complete-data-2023-umr-by-tti.xlsx](https://mobility.tamu.edu/umr/report/))
+  - [Texas A&M Transportation Institute: Base Statistics from the 2023 Urban Mobility Report](https://mobility.tamu.edu/umr/report/)
 - We use the data for Washington, D.C. from both data sources to calculate and persist updated traffic metrics based on the user actions (adding/removing roads) and our dynamic traffic simulation. These are the main metrics we track:
   - Average delay per mile
   - Average travel time per mile
